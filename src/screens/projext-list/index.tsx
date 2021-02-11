@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import qs from 'qs';
-import { useDebounce } from '../../utils/hooks';
+import { useDebounce, useMount } from '../../utils/hooks';
 import { List } from './list';
 import { SearchPanel } from './search-panel';
 import { cleanObject } from '../../utils';
@@ -8,14 +8,14 @@ import { cleanObject } from '../../utils';
 const ApiUrl = process.env.REACT_APP_API_URL;
 
 const ProjectListScreen = () => {
-  const [param, steParam] = useState({
+  const [param, setParam] = useState({
     name: '',
     personId: '',
   });
   const [list, setList] = useState([]);
   const [users, setUsers] = useState([]);
 
-  const debouncedParam = useDebounce(param, 1200);
+  const debouncedParam = useDebounce(param, 500);
 
   useEffect(() => {
     fetch(`${ApiUrl}/projects?${qs.stringify(cleanObject(param))}`).then(
@@ -37,16 +37,10 @@ const ProjectListScreen = () => {
 
   return (
     <div>
-      <SearchPanel users={users} param={param} steParam={steParam} />
+      <SearchPanel users={users} param={param} setParam={setParam} />
       <List users={users} list={list} />
     </div>
   );
 };
 
 export default ProjectListScreen;
-
-export const useMount = (callback) => {
-  useEffect(() => {
-    callback();
-  }, []);
-};

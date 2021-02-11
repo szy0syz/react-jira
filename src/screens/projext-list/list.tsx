@@ -1,4 +1,19 @@
-export const List = ({ users = [], list = [] }) => {
+import { User } from "./search-panel";
+
+interface Project {
+  id: string;
+  name: string;
+  personId: string;
+  pin: string;
+  organization: string;
+}
+
+interface ListProps {
+  list: Project[],
+  users: User[]
+}
+
+export const List = ({ users = [], list = [] }: ListProps) => {
   console.log('users', users);
   console.log('list', list);
 
@@ -11,11 +26,11 @@ export const List = ({ users = [], list = [] }) => {
         </tr>
       </thead>
       <tbody>
-        {list.map((project) => (
+        {list.map((project: Project) => (
           <tr key={project.id}>
             <td>{project.name}</td>
             <td>
-              {users.find((user) => user.id === project.personId)?.name ||
+              {users.find((user: User) => user.id === project.personId)?.name ||
                 '未知'}
             </td>
           </tr>

@@ -2,7 +2,7 @@ import React from 'react';
 
 const ApiUrl = process.env.REACT_APP_API_URL;
 
-export const LoginScreen = () => {
+const LoginScreen = () => {
   const login = (param: { username: string; password: string }) => {
     fetch(`${ApiUrl}/login`, {
       method: 'POST',
@@ -35,3 +35,5 @@ export const LoginScreen = () => {
     </form>
   );
 };
+
+export default LoginScreen

@@ -113,3 +113,21 @@ export const useAuth = () => {
   return context;
 };
 ```
+
+- 如何证明 TypeScript 里的类型是鸭子类型，且是面向接口编程，而不是面向对象编程？
+
+```ts
+interface Base {
+  id: number;
+}
+
+interface Advance extends Base {
+  name: string;
+}
+
+const test = (p: Base) => {};
+
+const a = { id: 1, name: 'jerry' };
+
+test(a); // --> ok
+```

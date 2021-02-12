@@ -1,4 +1,4 @@
-export const isFalsy = (value: any) => (value === 0 ? false : !value);
+export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
 
 export const cleanObject = (obj: object) => {
   // 最好别去改变传入的对象

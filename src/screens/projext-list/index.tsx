@@ -6,8 +6,6 @@ import { SearchPanel } from './search-panel';
 import { cleanObject } from '../../utils';
 import { useHttp } from 'utils/http';
 
-const ApiUrl = process.env.REACT_APP_API_URL;
-
 const ProjectListScreen = () => {
   const [param, setParam] = useState({
     name: '',

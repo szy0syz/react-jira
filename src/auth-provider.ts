@@ -12,27 +12,32 @@ export const handleUserResponse = ({ user }: { user: User }) => {
 };
 
 export const login = (data: { username: string; password: string }) => {
-  fetch(`${ApiUrl}/login`, {
+  return fetch(`${ApiUrl}/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   }).then(async (resp) => {
     if (resp.ok) {
       return handleUserResponse(await resp.json());
+    } else {
+      return Promise.reject(data);
     }
   });
 };
 
 export const register = (data: { username: string; password: string }) => {
-  fetch(`${ApiUrl}/register`, {
+  return fetch(`${ApiUrl}/register`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   }).then(async (resp) => {
     if (resp.ok) {
       return handleUserResponse(await resp.json());
+    } else {
+      return Promise.reject(data);
     }
   });
 };
 
-export const logout = () => window.localStorage.removeItem(LocalStorageKey);
+export const logout = async () =>
+  window.localStorage.removeItem(LocalStorageKey);

@@ -1,10 +1,8 @@
 import React from 'react';
-
+import { useAuth } from '../../context/auth-context';
 
 const LoginScreen = () => {
-  const login = (param: { username: string; password: string }) => {
-
-  };
+  const { login, user } = useAuth();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -15,6 +13,7 @@ const LoginScreen = () => {
 
   return (
     <form onSubmit={handleSubmit}>
+      {user ? <div>登录成功，用户名：{user?.name} </div> : null}
       <div>
         <label htmlFor="username">用户名</label>
         <input type="text" id={'username'} />
@@ -28,4 +27,4 @@ const LoginScreen = () => {
   );
 };
 
-export default LoginScreen
+export default LoginScreen;

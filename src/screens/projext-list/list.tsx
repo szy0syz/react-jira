@@ -17,12 +17,10 @@ interface ListProps {
 }
 
 export const List = ({ users = [], list = [] }: ListProps) => {
-  console.log('users', users);
-  console.log('list', list);
-
   return (
     <Table
       pagination={false}
+      key="id"
       columns={[
         {
           title: '名称',

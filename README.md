@@ -145,9 +145,38 @@ html {
 ```
 
 - grid 和 flex 各自的应用场景分析
-  - 要考虑是一维布局还是二维布局。一般来说，一维布局用flex，二维布局用grid
+
+  - 要考虑是一维布局还是二维布局。一般来说，一维布局用 flex，二维布局用 grid
   - 这个布局是从内容触发还是从布局出发？
     - 从内容触发：先有一组内容（数量一般不固定），然后希望他们均匀的分布在容器中，由内容自己的大小决定占据的空间
     - 从布局触发：先规划网格（数量一般比较固定），然后再把元素往里面填充
-    - -> 从内容触发，用flex
-    - -> 从布局触发，用grid
+    - -> 从内容触发，用 flex
+    - -> 从布局触发，用 grid
+
+- 这个 `Row` 组件封装的好
+
+```ts
+import styled from '@emotion/styled';
+
+export const Row = styled.div<{
+  gap?: number | boolean;
+  between?: boolean;
+  marginBottom?: number;
+}>`
+  display: flex;
+  align-items: center;
+  justify-content: ${(props) => (props.between ? 'space-between' : undefined)};
+  margin-bottom: ${(props) => props.marginBottom + 'rem'};
+
+  > * {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    margin-right: ${(props) =>
+      typeof props.gap === 'number'
+        ? props.gap + 'rem'
+        : props.gap
+        ? '2rem'
+        : undefined};
+  }
+`;
+```

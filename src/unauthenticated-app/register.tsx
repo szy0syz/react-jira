@@ -24,7 +24,7 @@ const RegisterScreen = () => {
         <Input placeholder="密码" type="password" id={'password'} />
       </Form.Item>
       <Form.Item>
-        <Button htmlType="submit" type="primary">
+        <Button block htmlType="submit" type="primary">
           注册
         </Button>
       </Form.Item>

@@ -131,3 +131,15 @@ const a = { id: 1, name: 'jerry' };
 
 test(a); // --> ok
 ```
+
+- rem
+
+```css
+html {
+  /* rem 、em */
+  /* em 相对于父元素的 font-size */
+  /* rem 相对于根元素html的 font-size */
+  /* 默认的16px *62.5% = 10px，1rem === 10px */
+  font-size: 62.5%;
+}
+```

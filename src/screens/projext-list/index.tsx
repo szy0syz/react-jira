@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import qs from 'qs';
-import { useDebounce, useMount } from '../../utils/hooks';
-import { List } from './list';
+import { useAsync, useDebounce, useMount } from '../../utils/hooks';
+import { List, Project } from './list';
 import { SearchPanel } from './search-panel';
 import { cleanObject } from '../../utils';
 import { useHttp } from 'utils/http';
@@ -12,14 +12,14 @@ const ProjectListScreen = () => {
     name: '',
     personId: '',
   });
-  const [list, setList] = useState([]);
   const [users, setUsers] = useState([]);
   const client = useHttp();
+  const { run, error, data: list, isLoading } = useAsync<Project[]>();
 
   const debouncedParam = useDebounce(param, 500);
 
   useEffect(() => {
-    client('projects', { data: cleanObject(debouncedParam) }).then(setList);
+    run(client('projects', { data: cleanObject(debouncedParam) }));
     // eslint-disable-next-line
   }, [debouncedParam]);
 
@@ -31,7 +31,7 @@ const ProjectListScreen = () => {
     <Container>
       <h1>项目列表</h1>
       <SearchPanel users={users} param={param} setParam={setParam} />
-      <List users={users} list={list} />
+      <List users={users} list={list || []} />
     </Container>
   );
 };
@@ -40,4 +40,4 @@ export default ProjectListScreen;
 
 const Container = styled.div`
   padding: 3.2rem;
-`
+`;

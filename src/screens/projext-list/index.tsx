@@ -6,6 +6,7 @@ import { SearchPanel } from './search-panel';
 import { cleanObject } from '../../utils';
 import { useHttp } from 'utils/http';
 import styled from '@emotion/styled';
+import { Typography } from 'antd';
 
 const ProjectListScreen = () => {
   const [param, setParam] = useState({
@@ -31,7 +32,10 @@ const ProjectListScreen = () => {
     <Container>
       <h1>项目列表</h1>
       <SearchPanel users={users} param={param} setParam={setParam} />
-      <List users={users} list={list || []} />
+      {error ? (
+        <Typography.Text type="danger">{error.message}</Typography.Text>
+      ) : null}
+      <List loading={isLoading} users={users} dataSource={list || []} />
     </Container>
   );
 };

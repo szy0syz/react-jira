@@ -22,7 +22,7 @@ export const List = ({ users, ...props }: ListProps) => {
   return (
     <Table
       pagination={false}
-      key="id"
+      rowKey="id"
       columns={[
         {
           title: '名称',

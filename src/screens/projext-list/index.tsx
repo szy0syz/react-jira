@@ -7,35 +7,26 @@ import { cleanObject } from '../../utils';
 import { useHttp } from 'utils/http';
 import styled from '@emotion/styled';
 import { Typography } from 'antd';
+import { useProjects } from 'utils/project';
+import { useUsers } from 'utils/user';
 
 const ProjectListScreen = () => {
   const [param, setParam] = useState({
     name: '',
     personId: '',
   });
-  const [users, setUsers] = useState([]);
-  const client = useHttp();
-  const { run, error, data: list, isLoading } = useAsync<Project[]>();
-
   const debouncedParam = useDebounce(param, 500);
-
-  useEffect(() => {
-    run(client('projects', { data: cleanObject(debouncedParam) }));
-    // eslint-disable-next-line
-  }, [debouncedParam]);
-
-  useMount(() => {
-    client('users').then(setUsers);
-  });
+  const { data: users } = useUsers();
+  const { isLoading, error, data: list } = useProjects(debouncedParam);
 
   return (
     <Container>
       <h1>项目列表</h1>
-      <SearchPanel users={users} param={param} setParam={setParam} />
+      <SearchPanel users={users || []} param={param} setParam={setParam} />
       {error ? (
         <Typography.Text type="danger">{error.message}</Typography.Text>
       ) : null}
-      <List loading={isLoading} users={users} dataSource={list || []} />
+      <List loading={isLoading} users={users || []} dataSource={list || []} />
     </Container>
   );
 };

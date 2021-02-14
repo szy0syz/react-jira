@@ -73,8 +73,8 @@ const Logo = () => (
         y2="75.4891864%"
         id="uid392-1"
       >
-        <stop stopColor="#0052CC" offset="7%"></stop>
-        <stop stopColor="#2684FF" offset="100%"></stop>
+        <stop stop-color="#0052CC" offset="7%"></stop>
+        <stop stop-color="#2684FF" offset="100%"></stop>
       </linearGradient>
       <linearGradient
         x1="8.43371138%"
@@ -83,8 +83,8 @@ const Logo = () => (
         y2="23.5790285%"
         id="uid392-2"
       >
-        <stop stopColor="#0052CC" offset="0%"></stop>
-        <stop stopColor="#2684FF" offset="100%"></stop>
+        <stop stop-color="#0052CC" offset="0%"></stop>
+        <stop stop-color="#2684FF" offset="100%"></stop>
       </linearGradient>
     </defs>
     <g stroke="none" strokeWidth="1" fillRule="nonzero">

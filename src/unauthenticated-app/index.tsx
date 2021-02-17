@@ -42,8 +42,8 @@ const Background = styled.div`
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: left bottom, right bottom;
-  background-size: calc(((100vw - 40rem) / 2)-3.2rem),
-    calc(((100vw - 40rem) / 2)-3.2rem), cover;
+  background-size: calc(((100vw - 40rem) / 2) - 3.2rem),
+    calc(((100vw - 40rem) / 2) - 3.2rem), cover;
   background-image: url(${left}), url(${right});
 `;
 
@@ -58,7 +58,7 @@ const ShadowCard = styled(Card)`
   width: 40rem;
   min-height: 56rem;
   padding: 3.2rem 4rem;
-  box-sizing: border-box;
+  border-radius: 0.3rem;
   box-shadow: rgba(0, 0, 0, 0.1) 0 0 10px;
   text-align: center;
 `;

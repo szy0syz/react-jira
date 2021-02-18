@@ -1,10 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import qs from 'qs';
-import { useAsync, useDebounce, useMount } from '../../utils/hooks';
-import { List, Project } from './list';
+import React, { useState } from 'react';
+import { useDebounce, useMount } from '../../utils/hooks';
+import { List } from './list';
 import { SearchPanel } from './search-panel';
-import { cleanObject } from '../../utils';
-import { useHttp } from 'utils/http';
 import styled from '@emotion/styled';
 import { Typography } from 'antd';
 import { useProjects } from 'utils/project';

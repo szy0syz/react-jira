@@ -6,10 +6,13 @@ import RegisterScreen from './register';
 import logo from 'assets/logo.svg';
 import left from 'assets/left.svg';
 import right from 'assets/right.svg';
+import { useDocumentTitle } from 'utils/hooks';
 
 export const UnauthenticatedApp = () => {
   const [isRegister, setIsRegister] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+
+  useDocumentTitle('请登录或注册');
 
   return (
     <Container>

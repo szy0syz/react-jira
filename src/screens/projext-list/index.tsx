@@ -16,7 +16,7 @@ const ProjectListScreen = () => {
   const { data: users } = useUsers();
   const { isLoading, error, data: list } = useProjects(debouncedParam);
 
-  useDocumentTitle("项目列表");
+  useDocumentTitle("项目列表", false);
 
   return (
     <Container>

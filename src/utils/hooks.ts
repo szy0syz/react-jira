@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export const useMount = (callback: () => void) => {
   useEffect(() => {
@@ -111,9 +111,9 @@ export const useAsync = <D>(
 };
 
 export const useDocumentTitle = (title: string, keepOnUnmount = true) => {
-  const oldTitle = document.title;
-
-  console.log('~~oldtitle', oldTitle);
+  const oldTitle = useRef(document.title).current;
+  // 页面加载时：旧title
+  // 加载后：新title
 
   useEffect(() => {
     document.title = title;
@@ -125,5 +125,5 @@ export const useDocumentTitle = (title: string, keepOnUnmount = true) => {
         document.title = oldTitle;
       }
     };
-  }, []);
+  }, [keepOnUnmount, oldTitle]);
 };

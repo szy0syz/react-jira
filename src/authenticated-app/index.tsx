@@ -4,9 +4,10 @@ import { Row } from 'components/lib';
 import { useAuth } from 'context/auth-context';
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router';
-import { BrowserRouter as Router } from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom';
 import { ProjectScreen } from 'screens/project';
 import ProjectListScreen from 'screens/projext-list';
+import { resetRoute } from 'utils';
 
 export const AuthenticatedApp = () => {
   return (
@@ -16,10 +17,8 @@ export const AuthenticatedApp = () => {
         <Router>
           <Routes>
             <Route path="/projects" element={<ProjectListScreen />}></Route>
-            <Route
-              path="/projects/:projectId/*"
-              element={<ProjectScreen />}
-            ></Route>
+            <Route path="/projects/:projectId/*" element={<ProjectScreen />} />
+            <Navigate to="/projects" />
           </Routes>
         </Router>
       </Main>
@@ -33,7 +32,9 @@ const PageHeader = () => {
   return (
     <Header between>
       <HeaderLeft gap>
-        <Logo />
+        <Button type="link" onClick={resetRoute}>
+          <Logo />
+        </Button>
         <h3>Logo</h3>
         <h3>项目</h3>
         <h3>用户</h3>

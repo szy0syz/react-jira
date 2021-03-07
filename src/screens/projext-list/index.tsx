@@ -1,22 +1,23 @@
-import React, { useState } from "react";
-import { useDebounce, useDocumentTitle, useMount } from "../../utils/hooks";
-import { List } from "./list";
-import { SearchPanel } from "./search-panel";
-import styled from "@emotion/styled";
-import { Typography } from "antd";
-import { useProjects } from "utils/project";
-import { useUsers } from "utils/user";
+import React, { useState } from 'react';
+import { useDebounce, useDocumentTitle, useMount } from '../../utils/hooks';
+import { List } from './list';
+import { SearchPanel } from './search-panel';
+import styled from '@emotion/styled';
+import { Typography } from 'antd';
+import { useProjects } from 'utils/project';
+import { useUsers } from 'utils/user';
+import { useUrlQueryParams } from 'utils/url';
 
 const ProjectListScreen = () => {
-  const [param, setParam] = useState({
-    name: "",
-    personId: "",
-  });
-  const debouncedParam = useDebounce(param, 500);
   const { data: users } = useUsers();
+  // 如果动态key
+  // const [keys, setKeys] = useState<('name' | 'personId')[]>(['name', 'personId'])
+  // 基本类型，可以放到依赖里；组件状态，可以放到依赖里；非组件状态的对象，绝不可以放到依赖里。
+  const [param, setParam] = useUrlQueryParams(['name', 'personId']);
+  const debouncedParam = useDebounce(param, 300);
   const { isLoading, error, data: list } = useProjects(debouncedParam);
 
-  useDocumentTitle("项目列表", false);
+  useDocumentTitle('项目列表', false);
 
   return (
     <Container>
@@ -29,6 +30,8 @@ const ProjectListScreen = () => {
     </Container>
   );
 };
+
+ProjectListScreen.whyDidYouRender = true;
 
 export default ProjectListScreen;
 

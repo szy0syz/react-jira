@@ -38,7 +38,7 @@ export const SearchPanel = ({ users, param, setParam }: SearchPanelProps) => {
       </Form.Item>
       <Form.Item>
         <Select
-          value={param.personId}
+          value={param.personId.toString()}
           onChange={(val) =>
             setParam({
               ...param,

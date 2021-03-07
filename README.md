@@ -232,3 +232,40 @@ export const List = ({ users, ...props }: ListProps) => {
   );
 };
 ```
+
+- why-did-you-render
+  - `yarn add @welldone-software/why-did-you-render`
+
+```ts
+// [/src/wdyr.ts]
+import React from 'react';
+
+if (process.env.NODE_ENV === 'development') {
+  const whyDidYouRender = require('@welldone-software/why-did-you-render');
+  whyDidYouRender(React, {
+    trackAllPureComponents: false,
+  });
+}
+```
+
+- `Object.fromEntries`
+
+> 了解 `iterator` 迭代器
+
+```ts
+ary = [1,2,3]
+// -> (3) [1, 2, 3]
+ary[Symbol.iterator]
+// -> ƒ values() { [native code] }
+i = ary[Symbol.iterator]()
+// -> Array Iterator {}
+
+i.next()
+// -> {value: 1, done: false}
+i.next()
+// -> {value: 2, done: false}
+i.next()
+// -> {value: 3, done: false}
+i.next()
+// -> {value: undefined, done: true}
+```

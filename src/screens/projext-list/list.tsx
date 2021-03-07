@@ -2,12 +2,13 @@ import { Table, TableProps } from 'antd';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
 import { User } from './search-panel';
+import { Pin } from 'components/pin';
 
 export interface Project {
   id: number;
   name: string;
   personId: number;
-  pin: string;
+  pin: boolean;
   organization: string;
   created: number;
 }
@@ -25,6 +26,12 @@ export const List = ({ users, ...props }: ListProps) => {
       pagination={false}
       rowKey="id"
       columns={[
+        {
+          title: <Pin checked={true} disabled={true} />,
+          render(value, project) {
+            return <Pin checked={project.pin} />;
+          },
+        },
         {
           title: '名称',
           dataIndex: 'name',

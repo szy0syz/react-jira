@@ -6,7 +6,7 @@ import { User } from './search-panel';
 export interface Project {
   id: number;
   name: string;
-  personId: string;
+  personId: number;
   pin: string;
   organization: string;
   created: number;
@@ -29,7 +29,7 @@ export const List = ({ users, ...props }: ListProps) => {
           title: '名称',
           dataIndex: 'name',
           sorter: (a, b) => a.name.localeCompare(b.name),
-          render(value, project) {
+          render(_, project) {
             return <Link to={String(project.id)}>{project.name}</Link>;
           },
         },

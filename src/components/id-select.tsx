@@ -23,7 +23,7 @@ export const IdSelect = (props: IdSelectProps) => {
   const { value, onChange, options, defaultOptionName, ...restProps } = props;
   return (
     <Select
-      value={toNumber(value)}
+      value={options?.length ? toNumber(value) : 0}
       onChange={(value) => onChange(toNumber(value) || undefined)}
       {...restProps}
     >

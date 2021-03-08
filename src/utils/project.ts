@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { cleanObject } from 'utils';
-import { Project } from './../screens/projext-list/list';
+import { Project } from '../screens/project-list/list';
 import { useAsync } from './hooks';
 import { useHttp } from './http';
 

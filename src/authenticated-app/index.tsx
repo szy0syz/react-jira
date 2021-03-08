@@ -6,7 +6,7 @@ import React from 'react';
 import { Navigate, Route, Routes } from 'react-router';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ProjectScreen } from 'screens/project';
-import ProjectListScreen from 'screens/projext-list';
+import ProjectListScreen from 'screens/project-list';
 import { resetRoute } from 'utils';
 
 export const AuthenticatedApp = () => {

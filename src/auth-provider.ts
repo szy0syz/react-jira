@@ -1,4 +1,4 @@
-import { User } from './screens/projext-list/search-panel';
+import { User } from './screens/project-list/search-panel';
 
 const ApiUrl = process.env.REACT_APP_API_URL;
 

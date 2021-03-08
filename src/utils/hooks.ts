@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 
 export const useMount = (callback: () => void) => {
   useEffect(() => {
@@ -36,11 +36,11 @@ export const useArray = <V>(ary: V[]) => {
 interface State<D> {
   error: Error | null;
   data: D | null;
-  stat: 'idle' | 'loading' | 'error' | 'success';
+  stat: "idle" | "loading" | "error" | "success";
 }
 
 const defaultInitialState: State<null> = {
-  stat: 'idle',
+  stat: "idle",
   data: null,
   error: null,
 };
@@ -58,6 +58,10 @@ export const useAsync = <D>(
     ...initialConfig,
   };
 
+  // useSatate 直接传入函数的含义是：惰性初始化；
+  // 所以，要用 useState 保存函数，不能直接传入函数
+  const [retry, setRerty] = useState(() => () => {});
+
   const [state, setState] = useState<State<D>>({
     ...defaultInitialState,
     ...initialState,
@@ -66,24 +70,32 @@ export const useAsync = <D>(
   const setData = (data: D) =>
     setState({
       data,
-      stat: 'success',
+      stat: "success",
       error: null,
     });
 
   const setError = (error: Error) =>
     setState({
       data: null,
-      stat: 'error',
+      stat: "error",
       error,
     });
 
   // run 用来触发异步请求
-  const run = (promise: Promise<D>) => {
+  const run = (
+    promise: Promise<D>,
+    runConfig?: { retry: () => Promise<D> }
+  ) => {
     if (!promise || !promise.then) {
-      throw new Error('请传入 Promise 类型的数据');
+      throw new Error("请传入 Promise 类型的数据");
     }
 
-    setState({ ...state, stat: 'loading' });
+    setRerty(() => () => {
+      if (runConfig?.retry) {
+        run(runConfig?.retry(), runConfig);
+      }
+    });
+    setState({ ...state, stat: "loading" });
 
     return promise
       .then((data) => {
@@ -99,13 +111,14 @@ export const useAsync = <D>(
   };
 
   return {
-    isIdle: state.stat === 'idle',
-    isError: state.stat === 'error',
-    isLoading: state.stat === 'loading',
-    isSuccess: state.stat === 'success',
+    isIdle: state.stat === "idle",
+    isError: state.stat === "error",
+    isLoading: state.stat === "loading",
+    isSuccess: state.stat === "success",
     run,
     setData,
     setError,
+    retry,
     ...state,
   };
 };

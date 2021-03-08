@@ -14,16 +14,19 @@ export interface Project {
   created: number;
 }
 
-interface ListProps extends TableProps<Project> {
-  users: User[];
-}
-
 // * 另一种写法
 // type PropsType = Omit<ListProps, 'users'>
+interface ListProps extends TableProps<Project> {
+  users: User[];
+  refresh: Function;
+}
 
-export const List = ({ users, ...props }: ListProps) => {
+export const List = ({ users, refresh, ...props }: ListProps) => {
   const { mutate } = useEditProject();
-  const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
+  const pinProject = (id: number) => (pin: boolean) => {
+    mutate({ id, pin });
+    refresh();
+  }
 
   return (
     <Table

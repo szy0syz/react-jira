@@ -310,3 +310,45 @@ export const IdSelect = (props: IdSelectProps) => {
   );
 };
 ```
+
+- **封装自己的error-boundary**
+
+```ts
+import React from 'react';
+
+type FallbackRender = (props: { error: Error | null }) => React.ReactElement;
+
+export class ErrorBoundary extends React.Component<
+  React.PropsWithChildren<{ fallbackRender: FallbackRender }>,
+  { error: Error | null }
+> {
+  state = { error: null };
+
+  // 当子组件抛出异常，这里就会收到并赋值给state
+  static getDerivedStateFromError(error: Error) {
+    return { error };
+  }
+
+  render() {
+    const { error } = this.state;
+    const { fallbackRender, children } = this.props;
+
+    if (error) {
+      return fallbackRender({ error });
+    }
+
+    return children;
+  }
+}
+```
+
+```ts
+// 如何使用 ErrorBoundary
+<ErrorBoundary fallbackRender={FullPageError}>
+  {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
+</ErrorBoundary>
+```
+
+- react-router 和 react-router-dom 的关系，类似于 react 和 react-dom/react-native/react-vr
+  - react 是个核心库，用于处理一些虚拟的、纯计算的逻辑，例如我们在组件中的state状态怎么来影响虚拟DOM树，还有两次虚拟DOM树的diff计算，这些逻辑都在react中处理
+  - 那么我们经过一系列计算得到的结果就会被 react-dom 等消费，为什么一开始就不直接集成在react里呢？因为 react-dom 是生活在浏览器的dom环境中，其里面充满了dom操作而且这些dom操作只能在浏览器中操作，而react-native是用来在移动端原生环境中来消费 react 产生的结果

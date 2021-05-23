@@ -363,3 +363,28 @@ export class ErrorBoundary extends React.Component<
   <Navigate to="/projects" />
 </Routes>
 ```
+
+- 一个无限循环的小例子
+
+```js
+import {useEffect, useState} from 'react'
+
+export default function App() {
+  // 当 obj 是基本类型时，就不会无限循环
+  // 当 obj 是对象时，就会无限循环
+  const obj = { name: "jerry" };
+  // const obj = 1;
+  const [num, setNum] = useState(0);
+
+  useEffect(() => {
+    setNum(prev => prev + 1);
+  }, [obj])
+
+  return (
+    <div style={{ textAlign: "center" }}>
+      <h1>Hello CodeSandbox</h1>
+      {num}
+    </div>
+  );
+}
+```

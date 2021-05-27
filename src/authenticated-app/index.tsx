@@ -35,7 +35,6 @@ const PageHeader = () => {
         <Button type="link" onClick={resetRoute}>
           <Logo />
         </Button>
-        <h3>Logo</h3>
         <h3>项目</h3>
         <h3>用户</h3>
       </HeaderLeft>

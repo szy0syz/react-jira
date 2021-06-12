@@ -1,9 +1,10 @@
-import { Table, TableProps } from "antd";
+import { Dropdown, Menu, Table, TableProps } from "antd";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import { User } from "./search-panel";
 import { Pin } from "components/pin";
 import { useEditProject } from "utils/project";
+import { ButtonNoPadding } from "components/lib";
 
 export interface Project {
   id: number;
@@ -26,7 +27,7 @@ export const List = ({ users, refresh, ...props }: ListProps) => {
   const pinProject = (id: number) => (pin: boolean) => {
     mutate({ id, pin });
     refresh();
-  }
+  };
 
   return (
     <Table
@@ -73,6 +74,23 @@ export const List = ({ users, refresh, ...props }: ListProps) => {
           render(value) {
             return (
               <span>{value ? dayjs(value).format("YYYY-MM-DD") : "无"}</span>
+            );
+          },
+        },
+        {
+          render(value, project) {
+            return (
+              <Dropdown
+                overlay={
+                  <Menu>
+                    <Menu.Item key="edit">
+                      <ButtonNoPadding type="link">编辑</ButtonNoPadding>
+                    </Menu.Item>
+                  </Menu>
+                }
+              >
+                <ButtonNoPadding type="link">...</ButtonNoPadding>
+              </Dropdown>
             );
           },
         },

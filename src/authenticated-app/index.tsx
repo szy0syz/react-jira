@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Button, Dropdown, Menu } from "antd";
-import { Row } from "components/lib";
+import { ButtonNoPadding, Row } from "components/lib";
 import { ProjectPopover } from "components/project-popover";
 import { useAuth } from "context/auth-context";
 import { useState } from "react";
@@ -38,9 +38,9 @@ const PageHeader = () => {
   return (
     <Header between>
       <HeaderLeft gap>
-        <Button style={{ padding: 0 }} type="link" onClick={resetRoute}>
+        <ButtonNoPadding type="link" onClick={resetRoute}>
           <Logo />
-        </Button>
+        </ButtonNoPadding>
         <ProjectPopover />
         <h3>用户</h3>
       </HeaderLeft>

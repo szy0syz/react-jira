@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { useDebounce, useDocumentTitle, useMount } from '../../utils/hooks';
+import { useDebounce, useDocumentTitle } from '../../utils/hooks';
 import { List } from './list';
 import { SearchPanel } from './search-panel';
 import styled from '@emotion/styled';

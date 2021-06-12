@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useReducer, useRef, useState } from "react";
+import { useMountedRef } from "utils";
 
 export const useMount = (callback: () => void) => {
   useEffect(() => {
@@ -49,6 +50,15 @@ const defaultConfig = {
   throwOnError: false,
 };
 
+const useSafeDispatch = <T>(dispatch: (...args: T[]) => void) => {
+  const mountedRef = useMountedRef();
+
+  return useCallback(
+    (...args: T[]) => (mountedRef.current ? dispatch(...args) : void 0),
+    [dispatch, mountedRef]
+  );
+};
+
 export const useAsync = <D>(
   initialState?: State<D>,
   initialConfig?: typeof defaultConfig
@@ -60,56 +70,64 @@ export const useAsync = <D>(
 
   // useSatate 直接传入函数的含义是：惰性初始化；
   // 所以，要用 useState 保存函数，不能直接传入函数
-  const [retry, setRerty] = useState(() => () => {});
+  const [retry, setRetry] = useState(() => () => {});
 
-  const [state, setState] = useState<State<D>>({
-    ...defaultInitialState,
-    ...initialState,
-  });
+  const [state, dispatch] = useReducer(
+    (state: State<D>, action: Partial<State<D>>) => ({ ...state, ...action }),
+    {
+      ...defaultInitialState,
+      ...initialState,
+    }
+  );
 
-  const setData = (data: D) =>
-    setState({
-      data,
-      stat: "success",
-      error: null,
-    });
+  const safeDispatch = useSafeDispatch(dispatch);
 
-  const setError = (error: Error) =>
-    setState({
-      data: null,
-      stat: "error",
-      error,
-    });
+  const setData = useCallback(
+    (data: D) =>
+      safeDispatch({
+        data,
+        stat: "success",
+        error: null,
+      }),
+    [safeDispatch]
+  );
+
+  const setError = useCallback(
+    (error: Error) =>
+      safeDispatch({
+        error,
+        stat: "error",
+        data: null,
+      }),
+    [safeDispatch]
+  );
 
   // run 用来触发异步请求
-  const run = (
-    promise: Promise<D>,
-    runConfig?: { retry: () => Promise<D> }
-  ) => {
-    if (!promise || !promise.then) {
-      throw new Error("请传入 Promise 类型的数据");
-    }
-
-    setRerty(() => () => {
-      if (runConfig?.retry) {
-        run(runConfig?.retry(), runConfig);
+  const run = useCallback(
+    (promise: Promise<D>, runConfig?: { retry: () => Promise<D> }) => {
+      if (!promise || !promise.then) {
+        throw new Error("请传入 Promise 类型数据");
       }
-    });
-
-    setState({ ...state, stat: "loading" });
-
-    return promise
-      .then((data) => {
-        setData(data);
-        return data;
-      })
-      .catch((error) => {
-        setError(error);
-        if (config.throwOnError) return Promise.reject(error);
-
-        return error;
+      setRetry(() => () => {
+        if (runConfig?.retry) {
+          run(runConfig?.retry(), runConfig);
+        }
       });
-  };
+      safeDispatch({ stat: "loading" });
+      return promise
+        .then((data) => {
+          setData(data);
+          return data;
+        })
+        .catch((error) => {
+          // catch会消化异常，如果不主动抛出，外面是接收不到异常的
+          setError(error);
+          if (config.throwOnError) return Promise.reject(error);
+          return error;
+        });
+    },
+    [config.throwOnError, setData, setError, safeDispatch]
+  );
 
   return {
     isIdle: state.stat === "idle",

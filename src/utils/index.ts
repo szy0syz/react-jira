@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
 
 export const isVoid = (value: unknown) =>
@@ -16,3 +18,20 @@ export const cleanObject = (obj: { [key: string]: unknown }) => {
 };
 
 export const resetRoute = () => window.location.href = window.location.origin;
+
+
+/**
+ * 返回组件的挂载状态，如果还没挂载或者已经卸载，返回false；反之，返回true
+ */
+ export const useMountedRef = () => {
+  const mountedRef = useRef(false);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  });
+
+  return mountedRef;
+};

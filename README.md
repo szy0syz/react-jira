@@ -442,3 +442,8 @@ const pinProject = (id: number) => (pin: boolean) => {
   ]}
 />;
 ```
+
+- useState 直接传入函数的含义是：惰性初始化
+  - 所以要用 useState 保存函数，不能直接传入函数
+
+> 9-5 fin

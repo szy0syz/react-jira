@@ -1,15 +1,19 @@
-import styled from '@emotion/styled';
-import { Button, Dropdown, Menu } from 'antd';
-import { Row } from 'components/lib';
-import { useAuth } from 'context/auth-context';
-import React from 'react';
-import { Navigate, Route, Routes } from 'react-router';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { ProjectScreen } from 'screens/project';
-import ProjectListScreen from 'screens/project-list';
-import { resetRoute } from 'utils';
+import styled from "@emotion/styled";
+import { Button, Dropdown, Menu } from "antd";
+import { Row } from "components/lib";
+import { ProjectPopover } from "components/project-popover";
+import { useAuth } from "context/auth-context";
+import { useState } from "react";
+import { Navigate, Route, Routes } from "react-router";
+import { BrowserRouter as Router } from "react-router-dom";
+import { ProjectScreen } from "screens/project";
+import ProjectListScreen from "screens/project-list";
+import { ProjectModal } from "screens/project-list/project-modal";
+import { resetRoute } from "utils";
 
 export const AuthenticatedApp = () => {
+  const [projectModalOpen, setProjectModalOpen] = useState(false);
+
   return (
     <Container>
       <PageHeader />
@@ -22,40 +26,49 @@ export const AuthenticatedApp = () => {
           </Routes>
         </Router>
       </Main>
+      <ProjectModal
+        projectModalOpen={projectModalOpen}
+        onClose={() => setProjectModalOpen(false)}
+      />
     </Container>
   );
 };
 
 const PageHeader = () => {
-  const { logout, user } = useAuth();
-
   return (
     <Header between>
       <HeaderLeft gap>
-        <Button type="link" onClick={resetRoute}>
+        <Button style={{ padding: 0 }} type="link" onClick={resetRoute}>
           <Logo />
         </Button>
-        <h3>项目</h3>
+        <ProjectPopover />
         <h3>用户</h3>
       </HeaderLeft>
       <HeaderRight>
-        <Dropdown
-          overlay={
-            <Menu>
-              <Menu.Item key="logout">
-                <Button type="link" onClick={logout}>
-                  登出
-                </Button>
-              </Menu.Item>
-            </Menu>
-          }
-        >
-          <Button type="link" onClick={(e) => e.preventDefault()}>
-            Hi, {user?.name}
-          </Button>
-        </Dropdown>
+        <User />
       </HeaderRight>
     </Header>
+  );
+};
+
+const User = () => {
+  const { logout, user } = useAuth();
+  return (
+    <Dropdown
+      overlay={
+        <Menu>
+          <Menu.Item key="logout">
+            <Button type="link" onClick={logout}>
+              登出
+            </Button>
+          </Menu.Item>
+        </Menu>
+      }
+    >
+      <Button type="link" onClick={(e) => e.preventDefault()}>
+        Hi, {user?.name}
+      </Button>
+    </Dropdown>
   );
 };
 
@@ -81,7 +94,7 @@ const Main = styled.main`
 const Logo = () => (
   <svg
     width="18rem"
-    color={'rgb(38,132,255)'}
+    color={"rgb(38,132,255)"}
     viewBox="0 0 179 32"
     xmlns="http://www.w3.org/2000/svg"
     focusable="false"

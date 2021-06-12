@@ -95,6 +95,7 @@ export const useAsync = <D>(
         run(runConfig?.retry(), runConfig);
       }
     });
+
     setState({ ...state, stat: "loading" });
 
     return promise

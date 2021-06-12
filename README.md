@@ -29,7 +29,7 @@ const debounce = (func, delay = 1000) => {
   };
 };
 
-const log = debounce(() => console.log('~~call~~'), 3000);
+const log = debounce(() => console.log("~~call~~"), 3000);
 
 log();
 log();
@@ -67,26 +67,27 @@ export const useDebounce = (value, delay) => {
 - `auth-context`
 
 ```ts
-import React, { ReactNode, useState } from 'react';
-import * as auth from '../auth-provider';
-import { User } from '../screens/projext-list/search-panel';
+import React, { ReactNode, useState } from "react";
+import * as auth from "../auth-provider";
+import { User } from "../screens/projext-list/search-panel";
 
 interface AuthForm {
   username: string;
   password: string;
 }
 
-const AuthContext = React.createContext<
-  | {
-      user: User | null;
-      login: (form: AuthForm) => Promise<void>;
-      register: (form: AuthForm) => Promise<void>;
-      logout: () => Promise<void>;
-    }
-  | undefined
->(undefined);
+const AuthContext =
+  React.createContext<
+    | {
+        user: User | null;
+        login: (form: AuthForm) => Promise<void>;
+        register: (form: AuthForm) => Promise<void>;
+        logout: () => Promise<void>;
+      }
+    | undefined
+  >(undefined);
 
-AuthContext.displayName = 'AuthContext';
+AuthContext.displayName = "AuthContext";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -107,7 +108,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 export const useAuth = () => {
   const context = React.useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth必须在AuthProvider中使用');
+    throw new Error("useAuth必须在AuthProvider中使用");
   }
 
   return context;
@@ -127,7 +128,7 @@ interface Advance extends Base {
 
 const test = (p: Base) => {};
 
-const a = { id: 1, name: 'jerry' };
+const a = { id: 1, name: "jerry" };
 
 test(a); // --> ok
 ```
@@ -156,7 +157,7 @@ html {
 - 这个 `Row` 组件封装的好
 
 ```ts
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 
 export const Row = styled.div<{
   gap?: number | boolean;
@@ -165,17 +166,17 @@ export const Row = styled.div<{
 }>`
   display: flex;
   align-items: center;
-  justify-content: ${(props) => (props.between ? 'space-between' : undefined)};
-  margin-bottom: ${(props) => props.marginBottom + 'rem'};
+  justify-content: ${(props) => (props.between ? "space-between" : undefined)};
+  margin-bottom: ${(props) => props.marginBottom + "rem"};
 
   > * {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
     margin-right: ${(props) =>
-      typeof props.gap === 'number'
-        ? props.gap + 'rem'
+      typeof props.gap === "number"
+        ? props.gap + "rem"
         : props.gap
-        ? '2rem'
+        ? "2rem"
         : undefined};
   }
 `;
@@ -198,31 +199,31 @@ export const List = ({ users, ...props }: ListProps) => {
       key="id"
       columns={[
         {
-          title: '名称',
-          dataIndex: 'name',
+          title: "名称",
+          dataIndex: "name",
           sorter: (a, b) => a.name.localeCompare(b.name),
         },
         {
-          title: '部门',
-          dataIndex: 'organization',
+          title: "部门",
+          dataIndex: "organization",
         },
         {
-          title: '负责人',
+          title: "负责人",
           render(_, project) {
             return (
               <span>
                 {users.find((user: User) => user.id === project.personId)
-                  ?.name || '未知'}
+                  ?.name || "未知"}
               </span>
             );
           },
         },
         {
-          title: '创建时间',
-          dataIndex: 'created',
+          title: "创建时间",
+          dataIndex: "created",
           render(value) {
             return (
-              <span>{value ? dayjs(value).format('YYYY-MM-DD') : '无'}</span>
+              <span>{value ? dayjs(value).format("YYYY-MM-DD") : "无"}</span>
             );
           },
         },
@@ -238,10 +239,10 @@ export const List = ({ users, ...props }: ListProps) => {
 
 ```ts
 // [/src/wdyr.ts]
-import React from 'react';
+import React from "react";
 
-if (process.env.NODE_ENV === 'development') {
-  const whyDidYouRender = require('@welldone-software/why-did-you-render');
+if (process.env.NODE_ENV === "development") {
+  const whyDidYouRender = require("@welldone-software/why-did-you-render");
   whyDidYouRender(React, {
     trackAllPureComponents: false,
   });
@@ -253,20 +254,20 @@ if (process.env.NODE_ENV === 'development') {
 > 了解 `iterator` 迭代器
 
 ```ts
-ary = [1,2,3]
+ary = [1, 2, 3];
 // -> (3) [1, 2, 3]
-ary[Symbol.iterator]
+ary[Symbol.iterator];
 // -> ƒ values() { [native code] }
-i = ary[Symbol.iterator]()
+i = ary[Symbol.iterator]();
 // -> Array Iterator {}
 
-i.next()
+i.next();
 // -> {value: 1, done: false}
-i.next()
+i.next();
 // -> {value: 2, done: false}
-i.next()
+i.next();
 // -> {value: 3, done: false}
-i.next()
+i.next();
 // -> {value: undefined, done: true}
 ```
 
@@ -276,7 +277,7 @@ i.next()
 type SelectProps = React.ComponentProps<typeof Select>;
 
 interface IdSelectProps
-  extends Omit<SelectProps, 'value' | 'onChange' | 'options'> {
+  extends Omit<SelectProps, "value" | "onChange" | "options"> {
   value: Raw | null | undefined;
   onChange: (value?: number) => void;
   defaultOptionName?: string;
@@ -311,10 +312,10 @@ export const IdSelect = (props: IdSelectProps) => {
 };
 ```
 
-- **封装自己的error-boundary**
+- **封装自己的 error-boundary**
 
 ```ts
-import React from 'react';
+import React from "react";
 
 type FallbackRender = (props: { error: Error | null }) => React.ReactElement;
 
@@ -350,14 +351,15 @@ export class ErrorBoundary extends React.Component<
 ```
 
 - react-router 和 react-router-dom 的关系，类似于 react 和 react-dom/react-native/react-vr
-  - react 是个核心库，用于处理一些虚拟的、纯计算的逻辑，例如我们在组件中的state状态怎么来影响虚拟DOM树，还有两次虚拟DOM树的diff计算，这些逻辑都在react中处理
-  - 那么我们经过一系列计算得到的结果就会被 react-dom 等消费，为什么一开始就不直接集成在react里呢？因为 react-dom 是生活在浏览器的dom环境中，其里面充满了dom操作而且这些dom操作只能在浏览器中操作，而react-native是用来在移动端原生环境中来消费 react 产生的结果
+
+  - react 是个核心库，用于处理一些虚拟的、纯计算的逻辑，例如我们在组件中的 state 状态怎么来影响虚拟 DOM 树，还有两次虚拟 DOM 树的 diff 计算，这些逻辑都在 react 中处理
+  - 那么我们经过一系列计算得到的结果就会被 react-dom 等消费，为什么一开始就不直接集成在 react 里呢？因为 react-dom 是生活在浏览器的 dom 环境中，其里面充满了 dom 操作而且这些 dom 操作只能在浏览器中操作，而 react-native 是用来在移动端原生环境中来消费 react 产生的结果
 
 - react-router 的默认路由
   - `Navigate` 就是默认路由
 
 ```ts
- <Routes>
+<Routes>
   <Route path="/projects" element={<ProjectListScreen />}></Route>
   <Route path="/projects/:projectId/*" element={<ProjectScreen />} />
   <Navigate to="/projects" />
@@ -367,7 +369,7 @@ export class ErrorBoundary extends React.Component<
 - 一个无限循环的小例子
 
 ```js
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from "react";
 
 export default function App() {
   // 当 obj 是基本类型时，就不会无限循环
@@ -377,8 +379,8 @@ export default function App() {
   const [num, setNum] = useState(0);
 
   useEffect(() => {
-    setNum(prev => prev + 1);
-  }, [obj])
+    setNum((prev) => prev + 1);
+  }, [obj]);
 
   return (
     <div style={{ textAlign: "center" }}>
@@ -390,3 +392,53 @@ export default function App() {
 ```
 
 - 基本类型，可以放到依赖里；组件状态，可以放到依赖里；非组件状态的对象，绝不可以放到依赖里。
+- 如何限定一个函数的返回值必须是传入的参数一模一样
+
+```ts
+export const useUrlQueryParams = <K extends string>(keys: K[]) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  return [
+    useMemo(
+      () =>
+        keys.reduce((prev, key) => {
+          return { ...prev, [key]: searchParams.get(key) || "" };
+        }, {} as { [key in K]: string }),
+      [searchParams]
+    ),
+    (params: Partial<{ [key in K]: unknown }>) => {
+      // <--
+      const o = cleanObject({
+        ...Object.fromEntries(searchParams),
+        ...params,
+      }) as URLSearchParamsInit;
+      setSearchParams(o);
+    },
+  ] as const; // 转成元组
+};
+```
+
+- 函数式操作 -- `point free`
+
+```ts
+const { mutate } = useEditProject();
+const pinProject = (id: number) => (pin: boolean) => {
+  mutate({ id, pin });
+  refresh();
+};
+
+<Table
+  pagination={false}
+  rowKey="id"
+  columns={[
+    {
+      title: <Pin checked={true} disabled={true} />,
+      render(_, project) {
+        return (
+          <Pin checked={project.pin} onCheckedChange={pinProject(project.id)} />
+        );
+      },
+    },
+  ]}
+/>;
+```

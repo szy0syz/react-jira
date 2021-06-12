@@ -17,7 +17,6 @@ const ProjectListScreen = () => {
   const [param, setParam] = useProjectSearchParams()
   const { isLoading, error, data: list, retry } = useProjects(useDebounce(param, 300));
 
-
   return (
     <Container>
       <h1>项目列表</h1>

@@ -446,4 +446,84 @@ const pinProject = (id: number) => (pin: boolean) => {
 - useState 直接传入函数的含义是：惰性初始化
   - 所以要用 useState 保存函数，不能直接传入函数
 
+- 这个 `hook` 真心有点吊
+
+```ts
+export const useUndo = <T>(initialPresent: T) => {
+  const [state, setState] = useState<{
+    past: T[];
+    future: T[];
+    present: T;
+  }>({
+    past: [],
+    future: [],
+    present: initialPresent,
+  });
+
+  const canUndo = state.past.length !== 0;
+  const canRedo = state.future.length !== 0;
+
+  const undo = useCallback(() => {
+    setState((currentState) => {
+      const { past, present, future } = currentState;
+      if (past.length === 0) return currentState;
+
+      const previous = past[past.length - 1];
+      const newPast = past.slice(0, past.length - 1);
+
+      return {
+        past: newPast,
+        present: previous,
+        future: [present, ...future],
+      };
+    });
+  }, []);
+
+  const redo = useCallback(() => {
+    setState((currentState) => {
+      const { past, present, future } = currentState;
+      if (future.length === 0) return currentState;
+
+      const next = future[0];
+      const newFurete = future.slice(1);
+
+      return {
+        past: [...past, present],
+        present: next,
+        future: newFurete,
+      };
+    });
+  }, []);
+
+  const set = useCallback((newPresent: T) => {
+    setState((currentState) => {
+      const { past, present } = currentState;
+      if (newPresent === present) return currentState;
+
+      return {
+        past: [...past, present],
+        present: newPresent,
+        future: [],
+      };
+    });
+  }, []);
+
+  const reset = useCallback((newPresent: T) => {
+    setState(() => {
+      return {
+        past: [],
+        present: newPresent,
+        future: [],
+      };
+    });
+  }, []);
+
+  return [
+    state,
+    { set, reset, undo, redo, canUndo, canRedo },
+  ] as const;
+};
+
+```
+
 > 10-3 8_30

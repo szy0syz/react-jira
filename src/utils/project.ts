@@ -75,3 +75,15 @@ export const useAddProject = () => {
   // };
   // return { mutate, ...asyncResult };
 };
+
+export const useProject = (id?:number) => {
+  const client = useHttp();
+
+  return useQuery<Project>(
+    ['project', {id}],
+    () => client(`projects/${id}`),
+    { // 当id有值的时候才去发请求
+      enabled: Boolean(id)
+    }
+  )
+}

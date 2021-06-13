@@ -3,7 +3,6 @@ import { Button, Dropdown, Menu } from "antd";
 import { ButtonNoPadding, Row } from "components/lib";
 import { ProjectPopover } from "components/project-popover";
 import { useAuth } from "context/auth-context";
-import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ProjectScreen } from "screens/project";

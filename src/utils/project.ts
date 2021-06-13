@@ -1,10 +1,8 @@
 import { QueryKey } from "react-query";
 // import { useEffect } from "react";
 // import { cleanObject } from "utils";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useProjectSearchParams } from "screens/project-list/util";
-import { Project } from "../screens/project-list/list";
-import { useAsync } from "./hooks";
+import { useMutation, useQuery } from "react-query";
+import { Project } from "../types/Project";
 import { useHttp } from "./http";
 import {
   useAddConfig,

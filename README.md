@@ -526,4 +526,28 @@ export const useUndo = <T>(initialPresent: T) => {
 
 ```
 
+- 没用类型守卫之前
+
+```ts
+export const ErrorBox = ({ error }: { error?: { message: string } }) => {
+  if (error?.message) {
+  }
+};
+```
+
+- 用了类型守卫之后
+
+```ts
+// 类型守卫：当满足某个条件时，返回的是某个类型
+const isError = (value: any): value is Error => value?.message;
+
+export const ErrorBox = ({ error }: { error: unknown }) => {
+  if (isError(error)) {
+    return <Typography.Text type="danger">{error.message}</Typography.Text>;
+  }
+
+  return null;
+};
+```
+
 > 10-6 0_0

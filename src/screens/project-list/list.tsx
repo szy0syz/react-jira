@@ -19,14 +19,13 @@ export interface Project {
 // type PropsType = Omit<ListProps, 'users'>
 interface ListProps extends TableProps<Project> {
   users: User[];
-  refresh: Function;
 }
 
-export const List = ({ users, refresh, ...props }: ListProps) => {
+export const List = ({ users, ...props }: ListProps) => {
   const { mutate } = useEditProject();
   const pinProject = (id: number) => (pin: boolean) => {
     mutate({ id, pin });
-    refresh();
+    // refresh();
   };
 
   return (

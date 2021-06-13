@@ -26,6 +26,11 @@ export const ProjectModal = () => {
     });
   };
 
+  const closeModal = () => {
+    form.resetFields();
+    close();
+  }
+
   useEffect(() => {
     form.setFieldsValue(editingProject);
   }, [form, editingProject]);
@@ -35,7 +40,7 @@ export const ProjectModal = () => {
       forceRender={true}
       visible={projectModalOpen}
       width="100%"
-      onClose={close}
+      onClose={closeModal}
     >
       <Container>
         {isLoading ? (

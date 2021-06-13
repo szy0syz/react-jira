@@ -1,5 +1,6 @@
 import { FullPageError, FullPageLoading } from 'components/lib';
 import React, { ReactNode, useState } from 'react';
+import { useQueryClient } from 'react-query';
 import { useAsync, useMount } from 'utils/hooks';
 import { http } from 'utils/http';
 import * as auth from '../auth-provider';
@@ -43,11 +44,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     run,
     setData: setUser,
   } = useAsync<User | null>();
+  const queryClient = useQueryClient();
 
   // point free
   const login = (form: AuthForm) => auth.login(form).then(setUser);
   const register = (form: AuthForm) => auth.register(form).then(setUser);
-  const logout = () => auth.logout().then(() => setUser(null));
+  const logout = () => auth.logout().then(() => {
+    setUser(null);
+    queryClient.clear();
+  });
 
   useMount(() => {
     run(bootstrapUser());

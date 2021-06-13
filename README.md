@@ -596,4 +596,4 @@ export const useAddConfig = (queryKey: QueryKey) =>
 
 > 真心抽得厉害！ 11-5!
 >
-> 11-5 12_0
+> 12-2 0_10

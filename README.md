@@ -444,6 +444,7 @@ const pinProject = (id: number) => (pin: boolean) => {
 ```
 
 - useState 直接传入函数的含义是：惰性初始化
+
   - 所以要用 useState 保存函数，不能直接传入函数
 
 - 这个 `hook` 真心有点吊
@@ -518,12 +519,8 @@ export const useUndo = <T>(initialPresent: T) => {
     });
   }, []);
 
-  return [
-    state,
-    { set, reset, undo, redo, canUndo, canRedo },
-  ] as const;
+  return [state, { set, reset, undo, redo, canUndo, canRedo }] as const;
 };
-
 ```
 
 - 没用类型守卫之前
@@ -548,6 +545,53 @@ export const ErrorBox = ({ error }: { error: unknown }) => {
 
   return null;
 };
+```
+
+- 封装 use-optimistic-options.ts
+
+```ts
+import { QueryKey, useQueryClient } from "react-query";
+
+export const useConfig = (
+  queryKey: QueryKey,
+  callback: (target: any, old?: any[]) => any[]
+) => {
+  const queryClient = useQueryClient();
+
+  return {
+    onSuccsee: () => queryClient.invalidateQueries(queryKey),
+    onMutate(target: any) {
+      const previousItems = queryClient.getQueryData(queryKey);
+      queryClient.setQueryData(queryKey, (old?: any[]) =>
+        callback(target, old)
+      );
+      return { previousItems };
+    },
+    onError(error: any, newItem: any, context: any) {
+      // 回滚数据
+      queryClient.setQueryData(
+        queryKey,
+        (context as { previousItems: any[] }).previousItems
+      );
+    },
+  };
+};
+
+export const useDeleteConfig = (queryKey: QueryKey) =>
+  useConfig(
+    queryKey,
+    (target, old) => old?.filter((item) => item.id !== target.id) || []
+  );
+export const useEditConfig = (queryKey: QueryKey) =>
+  useConfig(
+    queryKey,
+    (target, old) =>
+      old?.map((item) =>
+        item.id === target.id ? { ...item, ...target } : item
+      ) || []
+  );
+export const useAddConfig = (queryKey: QueryKey) =>
+  useConfig(queryKey, (target, old) => (old ? [...old, target] : []));
 ```
 
 > 真心抽得厉害！ 11-5!

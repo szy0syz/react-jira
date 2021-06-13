@@ -29,15 +29,15 @@ export const useProjectModal = () => {
 
   const open = () => setProjectCreate({ projectCreate: true });
   const close = () => { // 两个 url 状态都要清
-    setProjectCreate({ projectCreate: undefined });
     setEditingProjectId({ editingProjectId: undefined });
+    setProjectCreate({ projectCreate: undefined });
   };
 
   const startEdit = (id: number) =>
     setEditingProjectId({ editingProjectId: id });
 
   return {
-    projectModalOpen: projectCreate === "true" || Boolean(editingProject),
+    projectModalOpen: projectCreate === "true" || Boolean(editingProjectId),
     open,
     close,
     startEdit,

@@ -13,7 +13,7 @@ import {
 export const useProjects = (param?: Partial<Project>) => {
   const client = useHttp();
 
-  return useQuery<Project[], Error>(["projects", param], () =>
+  return useQuery<Project[]>(["projects", param], () =>
     client("projects", { data: param })
   );
 
@@ -81,7 +81,7 @@ export const useDeleteProject = (queryKey: QueryKey) => {
   const client = useHttp();
 
   return useMutation(
-    ({id}: {id: number}) =>
+    ({ id }: { id: number }) =>
       client(`projects/${id}`, {
         method: "DELETE",
       }),

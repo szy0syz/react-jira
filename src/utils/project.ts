@@ -1,9 +1,16 @@
+import { QueryKey } from "react-query";
 // import { useEffect } from "react";
 // import { cleanObject } from "utils";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useProjectSearchParams } from "screens/project-list/util";
 import { Project } from "../screens/project-list/list";
 import { useAsync } from "./hooks";
 import { useHttp } from "./http";
+import {
+  useAddConfig,
+  useDeleteConfig,
+  useEditConfig,
+} from "./use-optimistic-options";
 
 export const useProjects = (param?: Partial<Project>) => {
   const client = useHttp();
@@ -22,9 +29,8 @@ export const useProjects = (param?: Partial<Project>) => {
   // return result;
 };
 
-export const useEditProject = () => {
+export const useEditProject = (queryKey: QueryKey) => {
   const client = useHttp();
-  const queryClient = useQueryClient();
 
   return useMutation(
     (params: Partial<Project>) =>
@@ -32,12 +38,7 @@ export const useEditProject = () => {
         method: "PATCH",
         data: params,
       }),
-    {
-      onSuccess: () => queryClient.invalidateQueries("projects"),
-      async onMutate(target) {
-        const queryKey = ["projects"]
-      }
-    }
+    useEditConfig(queryKey)
   );
 
   // const { run, ...asyncResult } = useAsync();
@@ -52,9 +53,8 @@ export const useEditProject = () => {
   // return { mutate, ...asyncResult };
 };
 
-export const useAddProject = () => {
+export const useAddProject = (queryKey: QueryKey) => {
   const client = useHttp();
-  const queryClient = useQueryClient();
 
   return useMutation(
     (parmas: Partial<Project>) =>
@@ -62,31 +62,31 @@ export const useAddProject = () => {
         data: parmas,
         method: "POST",
       }),
-    {
-      onSuccess: () => queryClient.invalidateQueries("projects"),
-    }
+    useAddConfig(queryKey)
   );
-
-  // const { run, ...asyncResult } = useAsync();
-  // const mutate = (parmas: Partial<Project>) => {
-  //   return run(
-  //     client(`projects/${parmas.id}`, {
-  //       data: parmas,
-  //       method: "POST",
-  //     })
-  //   );
-  // };
-  // return { mutate, ...asyncResult };
 };
 
-export const useProject = (id?:number) => {
+export const useProject = (id?: number) => {
   const client = useHttp();
 
   return useQuery<Project>(
-    ['project', {id}],
+    ["project", { id }],
     () => client(`projects/${id}`),
-    { // 当id有值的时候才去发请求
-      enabled: Boolean(id)
+    {
+      // 当id有值的时候才去发请求
+      enabled: Boolean(id),
     }
-  )
-}
+  );
+};
+
+export const useDeleteProject = (queryKey: QueryKey) => {
+  const client = useHttp();
+
+  return useMutation(
+    ({id}: {id: number}) =>
+      client(`projects/${id}`, {
+        method: "DELETE",
+      }),
+    useDeleteConfig(queryKey)
+  );
+};

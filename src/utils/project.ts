@@ -55,7 +55,7 @@ export const useAddProject = () => {
 
   return useMutation(
     (parmas: Partial<Project>) =>
-      client(`projects/${parmas.id}`, {
+      client(`projects`, {
         data: parmas,
         method: "POST",
       }),

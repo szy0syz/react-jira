@@ -4,7 +4,7 @@ import { useQueryClient } from 'react-query';
 import { useAsync, useMount } from 'utils/hooks';
 import { http } from 'utils/http';
 import * as auth from '../auth-provider';
-import { User } from '../screens/project-list/search-panel';
+import { User } from "../types/User";
 
 interface AuthForm {
   username: string;

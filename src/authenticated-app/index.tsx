@@ -12,24 +12,19 @@ import { ProjectModal } from "screens/project-list/project-modal";
 import { resetRoute } from "utils";
 
 export const AuthenticatedApp = () => {
-  const [projectModalOpen, setProjectModalOpen] = useState(false);
-
   return (
     <Container>
-      <PageHeader />
-      <Main>
-        <Router>
+      <Router>
+        <PageHeader />
+        <Main>
           <Routes>
             <Route path="/projects" element={<ProjectListScreen />}></Route>
             <Route path="/projects/:projectId/*" element={<ProjectScreen />} />
             <Navigate to="/projects" />
           </Routes>
-        </Router>
-      </Main>
-      <ProjectModal
-        projectModalOpen={projectModalOpen}
-        onClose={() => setProjectModalOpen(false)}
-      />
+        </Main>
+        <ProjectModal />
+      </Router>
     </Container>
   );
 };

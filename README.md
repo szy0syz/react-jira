@@ -550,4 +550,6 @@ export const ErrorBox = ({ error }: { error: unknown }) => {
 };
 ```
 
+> 真心抽得厉害！ 11-5!
+>
 > 11-5 12_0

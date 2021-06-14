@@ -9,9 +9,7 @@ import { Card } from "antd";
 
 const TaskTypeIcon = ({ id }: { id: number }) => {
   const { data: taskTypes } = useTaskTypes();
-  console.log("~~taskTypes", taskTypes);
   const name = taskTypes?.find((taskType) => taskType.id === id)?.name;
-  console.log("~~aaa,", name);
   if (!name) return null;
 
   return <img src={name === "task" ? taskIcon : bugIcon} />;

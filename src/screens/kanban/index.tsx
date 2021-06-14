@@ -4,6 +4,7 @@ import { ScreenContainer } from "components/lib";
 import { useDocumentTitle } from "utils/hooks";
 import { useKanbans } from "utils/kanban";
 import { useTasks } from "utils/task";
+import { CreateKanban } from "./create-kanban";
 import { KanbanColumn } from "./kanban-column";
 import { SearchPanel } from "./search-panel";
 import {
@@ -33,13 +34,14 @@ export const KanbanScreen = () => {
           {kanbans?.map((kanban) => (
             <KanbanColumn kanban={kanban} key={kanban.id} />
           ))}
+          <CreateKanban />
         </ColumnsContainer>
       )}
     </ScreenContainer>
   );
 };
 
-const ColumnsContainer = styled.div`
+export const ColumnsContainer = styled.div`
   display: flex;
   overflow-x: scroll;
   flex: 1;

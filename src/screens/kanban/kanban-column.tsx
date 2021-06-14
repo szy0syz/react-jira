@@ -23,13 +23,13 @@ export const KanbanColumn = ({ kanban }: { kanban: Kanban }) => {
     <Container>
       <h3>{kanban.name}</h3>
       <TasksContainer>
-      {tasks?.map((task) => (
-        <Card style={{ marginBlock: "0.5rem" }} key={task.id}>
-          <div>{task.name}</div>
-          <TaskTypeIcon id={task.typeId} />
-        </Card>
-      ))}
-      <CreateTask kanbanId={kanban.id}/>
+        {tasks?.map((task) => (
+          <Card style={{ marginBlock: "0.5rem" }} key={task.id}>
+            <div>{task.name}</div>
+            <TaskTypeIcon id={task.typeId} />
+          </Card>
+        ))}
+        <CreateTask kanbanId={kanban.id} />
       </TasksContainer>
     </Container>
   );
@@ -48,7 +48,8 @@ export const Container = styled.div`
 const TasksContainer = styled.div`
   overflow: scroll;
   flex: 1;
+
   ::-webkit-scrollbar {
     display: none;
   }
-`
+`;

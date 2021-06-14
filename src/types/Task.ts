@@ -1,5 +1,5 @@
 export interface Task {
-  in: number;
+  id: number;
   name: String;
   typeId: number; // bug or task
   epicId: number; // 任务组

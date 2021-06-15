@@ -34,6 +34,7 @@ export const TaskModal = () => {
 
   return (
     <Modal
+      forceRender={true}
       okText="确认"
       cancelText="取消"
       confirmLoading={editLoading}

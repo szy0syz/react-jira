@@ -1,3 +1,4 @@
+import { useDebounce } from './../../utils/hooks';
 import { useTask } from "utils/task";
 import { useCallback, useMemo } from "react";
 import { useLocation } from "react-router";
@@ -23,7 +24,10 @@ export const useTasksSearchParams = () => {
     "processorId",
     "tagId",
   ]);
+
   const projectId = useProjectIdInUrl();
+  const debouncedName = useDebounce(params.name, 200);
+
   return useMemo(
     () => ({
       projectId,
@@ -32,7 +36,7 @@ export const useTasksSearchParams = () => {
       tagId: Number(params.tagId) || undefined,
       name: params.name,
     }),
-    [projectId, params]
+    [projectId, params, debouncedName]
   );
 };
 

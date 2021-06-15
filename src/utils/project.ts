@@ -38,17 +38,6 @@ export const useEditProject = (queryKey: QueryKey) => {
       }),
     useEditConfig(queryKey)
   );
-
-  // const { run, ...asyncResult } = useAsync();
-  // const mutate = (parmas: Partial<Project>) => {
-  //   return run(
-  //     client(`projects/${parmas.id}`, {
-  //       data: parmas,
-  //       method: "PATCH",
-  //     })
-  //   );
-  // };
-  // return { mutate, ...asyncResult };
 };
 
 export const useAddProject = (queryKey: QueryKey) => {

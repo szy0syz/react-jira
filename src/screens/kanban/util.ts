@@ -1,4 +1,5 @@
-import { useMemo } from "react";
+import { useTask } from "utils/task";
+import { useCallback, useMemo } from "react";
 import { useLocation } from "react-router";
 import { useProject } from "utils/project";
 import { useUrlQueryParams } from "utils/url";
@@ -16,7 +17,7 @@ export const useKanbanSearchParams = () => ({ projectId: useProjectIdInUrl() });
 export const useKanbansQueryKey = () => ["kanbans", useKanbanSearchParams()];
 
 export const useTasksSearchParams = () => {
-  const [params, setParams] = useUrlQueryParams([
+  const [params] = useUrlQueryParams([
     "name",
     "typeId",
     "processorId",
@@ -36,3 +37,21 @@ export const useTasksSearchParams = () => {
 };
 
 export const useTasksQueryKey = () => ["tasks", useTasksSearchParams()];
+
+export const useTasksModal = () => {
+  const [{ editingTaskId }, setEditingTaskId] = useUrlQueryParams([
+    "editingTaskId",
+  ]);
+  const { data: editingTask, isLoading } = useTask(Number(editingTaskId));
+  const startEdit = useCallback(
+    (id: number) => {
+      setEditingTaskId({ editingTaskId: id });
+    },
+    [setEditingTaskId]
+  );
+  const close = useCallback(() => {
+    setEditingTaskId({ editingTaskId: "" });
+  }, [setEditingTaskId]);
+
+  return { editingTaskId, editingTask, startEdit, close, isLoading };
+};

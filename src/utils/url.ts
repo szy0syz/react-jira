@@ -31,6 +31,6 @@ export const useSetUrlSearchParam = () => {
       ...Object.fromEntries(searchParams),
       ...params,
     }) as URLSearchParamsInit;
-    return setSearchParam(o);
+    return setSearchParam(o, { replace: true });
   };
 };

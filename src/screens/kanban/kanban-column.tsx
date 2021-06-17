@@ -8,6 +8,7 @@ import styled from "@emotion/styled";
 import { Card } from "antd";
 import { CreateTask } from "./create-task";
 import { Task } from "types/Task";
+import { Mark } from "components/mask";
 
 const TaskTypeIcon = ({ id }: { id: number }) => {
   const { data: taskTypes } = useTaskTypes();
@@ -19,6 +20,7 @@ const TaskTypeIcon = ({ id }: { id: number }) => {
 
 const TaskCard = ({ task }: { task: Task }) => {
   const { startEdit } = useTasksModal();
+  const { name: keyword } = useTasksSearchParams();
 
   return (
     <Card
@@ -26,7 +28,10 @@ const TaskCard = ({ task }: { task: Task }) => {
       style={{ marginBlock: "0.5rem", cursor: "pointer" }}
       key={task.id}
     >
-      <div>{task.name}</div>
+      {/* <div>{task.name}</div> */}
+      <div>
+        <Mark keyword={keyword} name={task.name} />
+      </div>
       <TaskTypeIcon id={task.typeId} />
     </Card>
   );

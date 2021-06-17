@@ -1,6 +1,6 @@
 export interface Task {
   id: number;
-  name: String;
+  name: string;
   typeId: number; // bug or task
   epicId: number; // 任务组
   kanbanId: number;

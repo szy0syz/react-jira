@@ -1,11 +1,11 @@
-import React from 'react';
-import { Select } from 'antd';
-import { Raw } from 'types';
+import React from "react";
+import { Select } from "antd";
+import { Raw } from "types";
 
 type SelectProps = React.ComponentProps<typeof Select>;
 
 interface IdSelectProps
-  extends Omit<SelectProps, 'value' | 'onChange' | 'options'> {
+  extends Omit<SelectProps, "value" | "onChange" | "options"> {
   value?: Raw | null | undefined;
   onChange?: (value?: number) => void;
   defaultOptionName?: string;

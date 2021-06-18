@@ -712,7 +712,7 @@ export const Drag = ({ children, ...props }: DragProps) => {
   - 封装 `DropChild` 等组件
   - 这样就节省了导出写 `{...provided.droppableProps}` `{...provided.draggableProps}`
   - 而 `ref` 的话在组件用 `forwardRef` 推出去
-  - 最后达到的下过如下
+  - 最后达到如下效果
 
 ```tsx
 <DragDropContext onDragEnd={() => {}}>

@@ -34,23 +34,24 @@ export const KanbanScreen = () => {
         {isLoading ? (
           <Spin size="large" />
         ) : (
-          <Drop type="COLUMN" direction="horizontal" droppableId="kanban">
-            {/* 这里是 styled(DropChild) */}
-            <ColumnsContainer>
-              {kanbans?.map((kanban, index) => (
-                <Drag
-                  key={kanban.id}
-                  draggableId={`kanban-${kanban.id}`}
-                  index={index}
-                >
-                  {/* KanbanColumn 要推ref出来给 Drag 用 */}
-                  <KanbanColumn kanban={kanban} />
-                </Drag>
-              ))}
-
-              <CreateKanban />
-            </ColumnsContainer>
-          </Drop>
+          <ColumnsContainer>
+            <Drop type="COLUMN" direction="horizontal" droppableId="kanban">
+              <DropChild style={{ display: "flex" }}>
+                {/* 这里是 styled(DropChild) */}
+                {kanbans?.map((kanban, index) => (
+                  <Drag
+                    key={kanban.id}
+                    draggableId={`kanban-${kanban.id}`}
+                    index={index}
+                  >
+                    {/* KanbanColumn 要推ref出来给 Drag 用 */}
+                    <KanbanColumn kanban={kanban} />
+                  </Drag>
+                ))}
+              </DropChild>
+            </Drop>
+            <CreateKanban />
+          </ColumnsContainer>
         )}
         <TaskModal />
       </ScreenContainer>
@@ -59,7 +60,7 @@ export const KanbanScreen = () => {
 };
 
 //* DropChild 还有问题
-export const ColumnsContainer = styled(DropChild)`
+export const ColumnsContainer = styled(`div`)`
   display: flex;
   overflow-x: scroll;
   flex: 1;

@@ -705,6 +705,42 @@ export const Drag = ({ children, ...props }: DragProps) => {
 };
 ```
 
+- 首先是为什么要封装这个一方库？
+  - 主要是为了节省后续在多个组件使用时代码量
+  - 这个效果还是要从官网的案例对照看
+- 那到底怎么节省的？
+  - 封装 `DropChild` 等组件
+  - 这样就节省了导出写 `{...provided.droppableProps}` `{...provided.draggableProps}`
+  - 而 `ref` 的话在组件用 `forwardRef` 推出去
+  - 最后达到的下过如下
 
+```tsx
+<DragDropContext onDragEnd={() => {}}>
+  <ScreenContainer>
+    <h1>{currentProject?.name}看板</h1>
+    <SearchPanel />
+    {isLoading ? (
+      <Spin size="large" />
+    ) : (
+      <Drop type="COLUMN" direction="horizontal" droppableId="kanban">
+        // 这里是 styled(DropChild)
+        <ColumnsContainer>
+          {kanbans?.map((kanban, index) => (
+            <Drag
+              index={index}
+              key={kanban.id}
+              draggableId={`kanban-${kanban.id}`}
+            > // KanbanColumn 要推ref出来给 Drag 用
+              <KanbanColumn kanban={kanban} />
+            </Drag>
+          ))}
+          <CreateKanban />
+        </ColumnsContainer>
+      </Drop>
+    )}
+    <TaskModal />
+  </ScreenContainer>
+</DragDropContext>
+```
 
 > 12-11 0_0

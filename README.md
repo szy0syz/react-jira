@@ -747,4 +747,34 @@ export const Drag = ({ children, ...props }: DragProps) => {
 
 - 在使用dnd时 `<Drag></Drag>` 需要 `ref`，如果该组件 `children` 只有一个元素如 `div` 时则会自动转发 `ref`
 
+- **记住**所有hook里返回的函数都必须用 `useCallback` 包裹住！
+
+```ts
+export const useDropEnd = () => {
+  const { data: kanbans } = useKanbans(useKanbanSearchParams());
+  const { mutate: reorderKanban } = useReorderKanban();
+
+  return React.useCallback(
+    ({ source, destination, type }: DropResult) => {
+      if (!destination) return;
+
+      if (type === "COLUMN") {
+        const fromId = kanbans?.[source.index].id;
+        const toId = kanbans?.[source.index].id;
+
+        // 如果拖拽了，但是兜圈子没改变顺序就不做啥
+        if (!fromId || !toId || fromId === toId) return;
+
+        const type = destination.index > source.index ? "after" : "before";
+        reorderKanban({ type, fromId, referenceId: toId });
+      }
+    },
+    [kanbans, reorderKanban]
+  );
+};
+```
+
+- 为什么以上 `hook` 的 `useCallback` 依赖是 `[kanbans, reorderKanban]`
+- 因为钩子到处都会用，不能在输入没变的情况下，无限制产生 “相同的” 函数！
+
 > 12-12 0_0

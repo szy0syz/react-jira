@@ -2,19 +2,20 @@ import styled from "@emotion/styled";
 import { Spin } from "antd";
 import { ScreenContainer } from "components/lib";
 import { useDocumentTitle } from "utils/hooks";
-import { useKanbans } from "utils/kanban";
+import { useKanbans, useReorderKanban } from "utils/kanban";
 import { useTasks } from "utils/task";
 import { CreateKanban } from "./create-kanban";
 import { KanbanColumn } from "./kanban-column";
 import { SearchPanel } from "./search-panel";
 import { TaskModal } from "./task-modal";
-import { DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { Drop, Drag, DropChild } from "../../components/drag-and-drop";
 import {
   useKanbanSearchParams,
   useProjectInUrl,
   useTasksSearchParams,
 } from "./util";
+import React from "react";
 
 export const KanbanScreen = () => {
   useDocumentTitle("看板列表");
@@ -59,15 +60,31 @@ export const KanbanScreen = () => {
   );
 };
 
-//* DropChild 还有问题
 export const ColumnsContainer = styled(`div`)`
   display: flex;
   overflow-x: scroll;
   flex: 1;
 `;
 
-// export const ColumnsContainer = styled.div`
-//   display: flex;
-//   overflow-x: scroll;
-//   flex: 1;
-// `;
+export const useDropEnd = () => {
+  const { data: kanbans } = useKanbans(useKanbanSearchParams());
+  const { mutate: reorderKanban } = useReorderKanban();
+
+  return React.useCallback(
+    ({ source, destination, type }: DropResult) => {
+      if (!destination) return;
+
+      if (type === "COLUMN") {
+        const fromId = kanbans?.[source.index].id;
+        const toId = kanbans?.[source.index].id;
+
+        // 如果拖拽了，但是兜圈子没改变顺序就不做啥
+        if (!fromId || !toId || fromId === toId) return;
+
+        const type = destination.index > source.index ? "after" : "before";
+        reorderKanban({ type, fromId, referenceId: toId });
+      }
+    },
+    [kanbans, reorderKanban]
+  );
+};

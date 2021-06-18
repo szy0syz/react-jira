@@ -1,10 +1,11 @@
 import React from "react";
 import {
   Draggable,
-  DraggableProps,
   Droppable,
+  DraggableProps,
   DroppableProps,
   DroppableProvided,
+  DroppableProvidedProps,
 } from "react-beautiful-dnd";
 
 type DropProps = Omit<DroppableProps, "children"> & {
@@ -29,12 +30,12 @@ export const Drop = ({ children, ...props }: DropProps) => {
 };
 
 type DropChildProps = Partial<
-  { provided: DroppableProvided } & DroppableProvided &
-    React.HtmlHTMLAttributes<HTMLDivElement>
->;
+  { provided: DroppableProvided } & DroppableProvidedProps
+> &
+  React.HTMLAttributes<HTMLDivElement>;
 export const DropChild = React.forwardRef<HTMLDivElement, DropChildProps>(
   ({ children, ...props }, ref) => (
-    <div ref={ref}>
+    <div ref={ref} {...props}>
       {children}
       {props.provided?.placeholder}
     </div>

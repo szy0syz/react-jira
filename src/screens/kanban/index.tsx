@@ -3,7 +3,7 @@ import { Spin } from "antd";
 import { ScreenContainer } from "components/lib";
 import { useDocumentTitle } from "utils/hooks";
 import { useKanbans, useReorderKanban } from "utils/kanban";
-import { useTasks } from "utils/task";
+import { useReorderTask, useTasks } from "utils/task";
 import { CreateKanban } from "./create-kanban";
 import { KanbanColumn } from "./kanban-column";
 import { SearchPanel } from "./search-panel";
@@ -28,7 +28,7 @@ export const KanbanScreen = () => {
   const isLoading = taskIsLoading || kanbanIsLoading;
 
   return (
-    <DragDropContext onDragEnd={(...props) => console.log(props)}>
+    <DragDropContext onDragEnd={useDragEnd()}>
       <ScreenContainer>
         <h1>{currentProject?.name}看板</h1>
         <SearchPanel />
@@ -66,17 +66,20 @@ export const ColumnsContainer = styled(`div`)`
   flex: 1;
 `;
 
-export const useDropEnd = () => {
+export const useDragEnd = () => {
   const { data: kanbans } = useKanbans(useKanbanSearchParams());
   const { mutate: reorderKanban } = useReorderKanban();
+  const { mutate: reorderTask } = useReorderTask();
+  const { data: allTasks = [] } = useTasks(useTasksSearchParams());
 
   return React.useCallback(
     ({ source, destination, type }: DropResult) => {
       if (!destination) return;
 
+      // 看板排序
       if (type === "COLUMN") {
         const fromId = kanbans?.[source.index].id;
-        const toId = kanbans?.[source.index].id;
+        const toId = kanbans?.[destination.index].id;
 
         // 如果拖拽了，但是兜圈子没改变顺序就不做啥
         if (!fromId || !toId || fromId === toId) return;
@@ -84,7 +87,36 @@ export const useDropEnd = () => {
         const type = destination.index > source.index ? "after" : "before";
         reorderKanban({ type, fromId, referenceId: toId });
       }
+
+      // 任务排序
+      if (type === "ROW") {
+        const fromKanbanId = +source.droppableId;
+        const toKanbanId = +destination.droppableId;
+
+        // 不允许跨看板拖拽任务
+        if (fromKanbanId !== toKanbanId) return;
+
+        const fromTask = allTasks.filter(
+          (task) => task.kanbanId === fromKanbanId
+        )[source.index];
+        const toTask = allTasks.filter(
+          (task) => task.kanbanId === fromKanbanId
+        )[destination.index];
+
+        if (fromTask?.id === toTask?.id) return;
+
+        reorderTask({
+          fromId: fromTask.id,
+          referenceId: toTask.id,
+          fromKanbanId,
+          toKanbanId,
+          type:
+            fromKanbanId === toKanbanId && destination.index > source.index
+              ? "after"
+              : "before",
+        });
+      }
     },
-    [kanbans, reorderKanban]
+    [kanbans, reorderKanban, allTasks, reorderTask]
   );
 };

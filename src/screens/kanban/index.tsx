@@ -35,6 +35,7 @@ export const KanbanScreen = () => {
           <Spin size="large" />
         ) : (
           <Drop type="COLUMN" direction="horizontal" droppableId="kanban">
+            {/* 这里是 styled(DropChild) */}
             <ColumnsContainer>
               {kanbans?.map((kanban, index) => (
                 <Drag
@@ -42,6 +43,7 @@ export const KanbanScreen = () => {
                   draggableId={`kanban-${kanban.id}`}
                   index={index}
                 >
+                  {/* KanbanColumn 要推ref出来给 Drag 用 */}
                   <KanbanColumn kanban={kanban} />
                 </Drag>
               ))}
@@ -68,4 +70,3 @@ export const ColumnsContainer = styled(DropChild)`
 //   overflow-x: scroll;
 //   flex: 1;
 // `;
-

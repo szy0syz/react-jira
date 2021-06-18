@@ -723,17 +723,19 @@ export const Drag = ({ children, ...props }: DragProps) => {
       <Spin size="large" />
     ) : (
       <Drop type="COLUMN" direction="horizontal" droppableId="kanban">
-        // 这里是 styled(DropChild)
+        {/* 这里是 styled(DropChild) */}
         <ColumnsContainer>
           {kanbans?.map((kanban, index) => (
             <Drag
-              index={index}
               key={kanban.id}
               draggableId={`kanban-${kanban.id}`}
-            > // KanbanColumn 要推ref出来给 Drag 用
+              index={index}
+            >
+              {/* KanbanColumn 要推ref出来给 Drag 用 */}
               <KanbanColumn kanban={kanban} />
             </Drag>
           ))}
+
           <CreateKanban />
         </ColumnsContainer>
       </Drop>

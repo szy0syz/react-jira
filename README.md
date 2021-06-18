@@ -745,4 +745,6 @@ export const Drag = ({ children, ...props }: DragProps) => {
 </DragDropContext>
 ```
 
+- 在使用dnd时 `<Drag></Drag>` 需要 `ref`，如果该组件 `children` 只有一个元素如 `div` 时则会自动转发 `ref`
+
 > 12-12 0_0

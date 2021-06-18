@@ -27,7 +27,7 @@ export const KanbanScreen = () => {
   const isLoading = taskIsLoading || kanbanIsLoading;
 
   return (
-    <DragDropContext onDragEnd={() => {}}>
+    <DragDropContext onDragEnd={(...props) => console.log(props)}>
       <ScreenContainer>
         <h1>{currentProject?.name}看板</h1>
         <SearchPanel />

@@ -8,6 +8,8 @@ import { CreateKanban } from "./create-kanban";
 import { KanbanColumn } from "./kanban-column";
 import { SearchPanel } from "./search-panel";
 import { TaskModal } from "./task-modal";
+import { DragDropContext } from "react-beautiful-dnd";
+import { Drop, Drag, DropChild } from "../../components/drag-and-drop";
 import {
   useKanbanSearchParams,
   useProjectInUrl,
@@ -25,26 +27,45 @@ export const KanbanScreen = () => {
   const isLoading = taskIsLoading || kanbanIsLoading;
 
   return (
-    <ScreenContainer>
-      <h1>{currentProject?.name}看板</h1>
-      <SearchPanel />
-      {isLoading ? (
-        <Spin size="large" />
-      ) : (
-        <ColumnsContainer>
-          {kanbans?.map((kanban) => (
-            <KanbanColumn kanban={kanban} key={kanban.id} />
-          ))}
-          <CreateKanban />
-        </ColumnsContainer>
-      )}
-      <TaskModal />
-    </ScreenContainer>
+    <DragDropContext onDragEnd={() => {}}>
+      <ScreenContainer>
+        <h1>{currentProject?.name}看板</h1>
+        <SearchPanel />
+        {isLoading ? (
+          <Spin size="large" />
+        ) : (
+          <Drop type="COLUMN" direction="horizontal" droppableId="kanban">
+            <ColumnsContainer>
+              {kanbans?.map((kanban, index) => (
+                <Drag
+                  key={kanban.id}
+                  draggableId={`kanban-${kanban.id}`}
+                  index={index}
+                >
+                  <KanbanColumn kanban={kanban} />
+                </Drag>
+              ))}
+
+              <CreateKanban />
+            </ColumnsContainer>
+          </Drop>
+        )}
+        <TaskModal />
+      </ScreenContainer>
+    </DragDropContext>
   );
 };
 
-export const ColumnsContainer = styled.div`
+//* DropChild 还有问题
+export const ColumnsContainer = styled(DropChild)`
   display: flex;
   overflow-x: scroll;
   flex: 1;
 `;
+
+// export const ColumnsContainer = styled.div`
+//   display: flex;
+//   overflow-x: scroll;
+//   flex: 1;
+// `;
+

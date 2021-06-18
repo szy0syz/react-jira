@@ -634,4 +634,77 @@ function Ch({ id }) {
   - 用到现在，感觉 `React-Query` 比 `SWR` 用上去更简单的
 - 💖 最终，所有都是函数式 `hook` 组件的项目，到底能不能达到 `React` 项目组所说的 `代数效应` ?
 
+### drag-and-drop
+
+> 这个封装一方库，对泛型和React源码还是有点要求。
+
+```ts
+import React from "react";
+import {
+  Draggable,
+  Droppable,
+  DraggableProps,
+  DroppableProps,
+  DroppableProvided,
+  DroppableProvidedProps,
+} from "react-beautiful-dnd";
+
+type DropProps = Omit<DroppableProps, "children"> & {
+  children: React.ReactNode;
+};
+
+export const Drop = ({ children, ...props }: DropProps) => {
+  return (
+    <Droppable {...props}>
+      {(provided) => {
+        if (React.isValidElement(children)) {
+          return React.cloneElement(children, {
+            ...provided.droppableProps,
+            ref: provided.innerRef,
+            provided,
+          });
+        }
+        return <div />;
+      }}
+    </Droppable>
+  );
+};
+
+type DropChildProps = Partial<
+  { provided: DroppableProvided } & DroppableProvidedProps
+> &
+  React.HTMLAttributes<HTMLDivElement>;
+export const DropChild = React.forwardRef<HTMLDivElement, DropChildProps>(
+  ({ children, ...props }, ref) => (
+    <div ref={ref} {...props}>
+      {children}
+      {props.provided?.placeholder}
+    </div>
+  )
+);
+
+type DragProps = Omit<DraggableProps, "children"> & {
+  children: React.ReactNode;
+};
+
+export const Drag = ({ children, ...props }: DragProps) => {
+  return (
+    <Draggable {...props}>
+      {(provided) => {
+        if (React.isValidElement(children)) {
+          return React.cloneElement(children, {
+            ...provided.draggableProps,
+            ...provided.dragHandleProps,
+            ref: provided.innerRef,
+          });
+        }
+        return <div />;
+      }}
+    </Draggable>
+  );
+};
+```
+
+
+
 > 12-11 0_0

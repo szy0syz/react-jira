@@ -31,3 +31,22 @@ test("http方法发送异步请求", async () => {
 
   expect(result).toEqual(mockResult);
 });
+
+test("htt[请求时会在header里带上token", async () => {
+  const token = "FAKE_TOKEN";
+  const endpoint = "test-endpotin";
+  const mockResult = { mockValue: "mock" };
+
+  let request: any;
+
+  server.use(
+    rest.get(`${apiUrl}/${endpoint}`, async (req, res, ctx) => {
+      request = req;
+
+      return res(ctx.json(mockResult));
+    })
+  );
+
+  await http(endpoint, {token});
+  expect(request.headers.get("Authorization")).toBe(`Bearer ${token}`)
+});

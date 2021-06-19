@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import styled from "@emotion/styled";
 import { Spin } from "antd";
 import { ScreenContainer } from "components/lib";
@@ -12,10 +13,11 @@ import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { Drop, Drag, DropChild } from "../../components/drag-and-drop";
 import {
   useKanbanSearchParams,
+  useKanbansQueryKey,
   useProjectInUrl,
+  useTasksQueryKey,
   useTasksSearchParams,
 } from "./util";
-import React from "react";
 
 export const KanbanScreen = () => {
   useDocumentTitle("看板列表");
@@ -27,8 +29,10 @@ export const KanbanScreen = () => {
 
   const isLoading = taskIsLoading || kanbanIsLoading;
 
+  const onDragEnd = useDragEnd();
+
   return (
-    <DragDropContext onDragEnd={useDragEnd()}>
+    <DragDropContext onDragEnd={onDragEnd}>
       <ScreenContainer>
         <h1>{currentProject?.name}看板</h1>
         <SearchPanel />
@@ -68,46 +72,43 @@ export const ColumnsContainer = styled(`div`)`
 
 export const useDragEnd = () => {
   const { data: kanbans } = useKanbans(useKanbanSearchParams());
-  const { mutate: reorderKanban } = useReorderKanban();
-  const { mutate: reorderTask } = useReorderTask();
+  const { mutate: reorderKanban } = useReorderKanban(useKanbansQueryKey());
+  const { mutate: reorderTask } = useReorderTask(useTasksQueryKey());
   const { data: allTasks = [] } = useTasks(useTasksSearchParams());
 
-  return React.useCallback(
+  return useCallback(
     ({ source, destination, type }: DropResult) => {
-      if (!destination) return;
-
+      if (!destination) {
+        return;
+      }
       // 看板排序
       if (type === "COLUMN") {
         const fromId = kanbans?.[source.index].id;
         const toId = kanbans?.[destination.index].id;
-
-        // 如果拖拽了，但是兜圈子没改变顺序就不做啥
-        if (!fromId || !toId || fromId === toId) return;
-
+        if (!fromId || !toId || fromId === toId) {
+          return;
+        }
         const type = destination.index > source.index ? "after" : "before";
-        reorderKanban({ type, fromId, referenceId: toId });
+        reorderKanban({ fromId, referenceId: toId, type });
       }
-
-      // 任务排序
       if (type === "ROW") {
         const fromKanbanId = +source.droppableId;
         const toKanbanId = +destination.droppableId;
-
-        // 不允许跨看板拖拽任务
-        if (fromKanbanId !== toKanbanId) return;
-
+        if (fromKanbanId === toKanbanId) {
+          return;
+        }
         const fromTask = allTasks.filter(
           (task) => task.kanbanId === fromKanbanId
         )[source.index];
-        const toTask = allTasks.filter(
-          (task) => task.kanbanId === fromKanbanId
-        )[destination.index];
-
-        if (fromTask?.id === toTask?.id) return;
-
+        const toTask = allTasks.filter((task) => task.kanbanId === toKanbanId)[
+          destination.index
+        ];
+        if (fromTask?.id === toTask?.id) {
+          return;
+        }
         reorderTask({
-          fromId: fromTask.id,
-          referenceId: toTask.id,
+          fromId: fromTask?.id,
+          referenceId: toTask?.id,
           fromKanbanId,
           toKanbanId,
           type:

@@ -1,11 +1,11 @@
 import { useHttp } from "./http";
-import { QueryKey, useMutation, useQuery } from "react-query";
 import { Task } from "types/Task";
+import { QueryKey, useMutation, useQuery } from "react-query";
 import {
   useAddConfig,
-  useDeleteConfig,
   useEditConfig,
-  useReorderConfig,
+  useDeleteConfig,
+  useReorderTaskConfig,
 } from "./use-optimistic-options";
 
 export const useTasks = (param?: Partial<Task>) => {
@@ -80,5 +80,5 @@ export const useReorderTask = (queryKey: QueryKey) => {
       data: params,
       method: "POST",
     });
-  }, useReorderConfig(queryKey));
+  }, useReorderTaskConfig(queryKey));
 };

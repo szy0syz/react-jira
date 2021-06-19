@@ -783,4 +783,8 @@ export const useDropEnd = () => {
 
 但他的计算还是占用资源，就是的一个 `浅比较`，需要酌情试用，不能无限制乱用！
 
-> 13-3 0_0
+### 测试
+
+- `yarn add @testing-library/react-hooks msw -D`
+
+> 14-3 0_0

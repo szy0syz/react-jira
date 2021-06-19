@@ -56,7 +56,9 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/react-hooks": "^7.0.0",
     "@types/qs": "^6.9.5",
-    "json-server": "^0.16.3"
+    "json-server": "^0.16.3",
+    "msw": "^0.29.0"
   }
 }

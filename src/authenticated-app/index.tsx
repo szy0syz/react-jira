@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { Button, Dropdown, Menu } from "antd";
 import { ButtonNoPadding, Row } from "components/lib";
 import { ProjectPopover } from "components/project-popover";
+import { UserPopover } from "components/user-popover";
 import { useAuth } from "context/auth-context";
 import { Navigate, Route, Routes } from "react-router";
 import { BrowserRouter as Router } from "react-router-dom";
@@ -36,7 +37,7 @@ const PageHeader = () => {
           <Logo />
         </ButtonNoPadding>
         <ProjectPopover />
-        <h3>用户</h3>
+        <UserPopover />
       </HeaderLeft>
       <HeaderRight>
         <User />

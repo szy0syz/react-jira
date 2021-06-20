@@ -5,7 +5,6 @@ import { ProjectPopover } from "components/project-popover";
 import { UserPopover } from "components/user-popover";
 import { useAuth } from "context/auth-context";
 import { Navigate, Route, Routes } from "react-router";
-import { BrowserRouter as Router } from "react-router-dom";
 import { ProjectScreen } from "screens/project";
 import ProjectListScreen from "screens/project-list";
 import { ProjectModal } from "screens/project-list/project-modal";
@@ -14,17 +13,15 @@ import { resetRoute } from "utils";
 export const AuthenticatedApp = () => {
   return (
     <Container>
-      <Router>
-        <PageHeader />
-        <Main>
-          <Routes>
-            <Route path="/projects" element={<ProjectListScreen />}></Route>
-            <Route path="/projects/:projectId/*" element={<ProjectScreen />} />
-            <Navigate to="/projects" />
-          </Routes>
-        </Main>
-        <ProjectModal />
-      </Router>
+      <PageHeader />
+      <Main>
+        <Routes>
+          <Route path="/projects" element={<ProjectListScreen />}></Route>
+          <Route path="/projects/:projectId/*" element={<ProjectScreen />} />
+          <Navigate to="/projects" />
+        </Routes>
+      </Main>
+      <ProjectModal />
     </Container>
   );
 };

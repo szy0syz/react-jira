@@ -5,7 +5,9 @@ export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
 export const isVoid = (value: unknown) =>
   value === undefined || value === null || value === '';
 
-export const cleanObject = (obj: { [key: string]: unknown }) => {
+export const cleanObject = (obj?: { [key: string]: unknown }) => {
+  if (!obj) return {};
+
   // 最好别去改变传入的对象
   const result = { ...obj };
 

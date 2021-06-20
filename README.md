@@ -783,7 +783,74 @@ export const useDropEnd = () => {
 
 但他的计算还是占用资源，就是的一个 `浅比较`，需要酌情试用，不能无限制乱用！
 
+### 性能
+
+```ts
+import React, { ProfilerOnRenderCallback, ProfilerProps } from "react";
+
+type Props = { metadata?: any; phase?: ("mount" | "update")[] } & Omit<
+  ProfilerProps,
+  "onRender"
+>;
+
+let queue: unknown[] = [];
+
+const sendProfileQueue = () => {
+  if (!queue.length) return;
+
+  const queueToSend = [...queue];
+  queue = [];
+
+  console.log(queueToSend);
+};
+
+setInterval(sendProfileQueue, 5000);
+
+export const Profiler = ({ metadata, phase, ...props }: Props) => {
+  const reportProfile: ProfilerOnRenderCallback = (
+    id,
+    phase,
+    actualDuration,
+    baseDuration,
+    startTime,
+    commitTime,
+    interactions
+  ) => {
+    if (!phase || phase.includes(phase)) {
+      queue.push({
+        id,
+        phase,
+        actualDuration,
+        baseDuration,
+        startTime,
+        commitTime,
+        interactions,
+      });
+    }
+  };
+
+  return <React.Profiler onRender={reportProfile} {...props} />;
+};
+```
+
 ### 测试
+
+```ts
+import { render, screen } from "@testing-library/react";
+import { Mark } from "components/mask";
+
+test("Mark 组件正确高亮关键词", () => {
+  const name = "物料管理";
+  const keyword = "管理";
+
+  render(<Mark name={name} keyword={keyword} />);
+
+  expect(screen.getByText(keyword)).toBeInTheDocument();
+  expect(screen.getByText(keyword)).toHaveStyle("color: #257AFD");
+  expect(screen.getByText("物料")).not.toHaveStyle("color: #257AFD");
+});
+
+```
 
 - `yarn add @testing-library/react-hooks msw -D`
 

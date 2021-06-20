@@ -6,7 +6,13 @@ import { Button, Typography } from "antd";
 import { useProjects } from "utils/project";
 import { useUsers } from "utils/user";
 import { useProjectModal, useProjectSearchParams } from "./util";
-import { ButtonNoPadding, ErrorBox, Row } from "components/lib";
+import {
+  ButtonNoPadding,
+  ErrorBox,
+  Row,
+  ScreenContainer,
+} from "components/lib";
+import { Profiler } from "components/profiler";
 
 const ProjectListScreen = () => {
   const { open } = useProjectModal();
@@ -16,28 +22,22 @@ const ProjectListScreen = () => {
   // const [keys, setKeys] = useState<('name' | 'personId')[]>(['name', 'personId'])
   // 基本类型，可以放到依赖里；组件状态，可以放到依赖里；非组件状态的对象，绝不可以放到依赖里。
   const [param, setParam] = useProjectSearchParams();
-  const {
-    isLoading,
-    error,
-    data: list,
-  } = useProjects(useDebounce(param, 300));
+  const { isLoading, error, data: list } = useProjects(useDebounce(param, 300));
 
   return (
-    <Container>
-      <Row between={true}>
-        <h1>项目列表</h1>
-        <ButtonNoPadding type="link" onClick={open}>
-          创建项目
-        </ButtonNoPadding>
-      </Row>
-      <SearchPanel users={users || []} param={param} setParam={setParam} />
-      <ErrorBox error={error} />
-      <List
-        loading={isLoading}
-        users={users || []}
-        dataSource={list || []}
-      />
-    </Container>
+    <Profiler id="项目列表">
+      <ScreenContainer>
+        <Row between={true}>
+          <h1>项目列表</h1>
+          <ButtonNoPadding type="link" onClick={open}>
+            创建项目
+          </ButtonNoPadding>
+        </Row>
+        <SearchPanel users={users || []} param={param} setParam={setParam} />
+        <ErrorBox error={error} />
+        <List loading={isLoading} users={users || []} dataSource={list || []} />
+      </ScreenContainer>
+    </Profiler>
   );
 };
 

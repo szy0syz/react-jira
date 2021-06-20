@@ -1,21 +1,24 @@
-import './wdyr';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import "./wdyr";
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
 import { DevTools, loadServer } from "jira-dev-tool";
-import { AppProvider } from './context';
-import 'antd/dist/antd.less';
+import { AppProvider } from "./context";
+import "antd/dist/antd.less";
+import { Profiler } from "components/profiler";
 
 loadServer(() =>
   ReactDOM.render(
     <React.StrictMode>
-      <AppProvider>
-        <DevTools />
-        <App />
-      </AppProvider>
+      <Profiler id="Root" phase={["mount"]}>
+        <AppProvider>
+          <DevTools />
+          <App />
+        </AppProvider>
+      </Profiler>
     </React.StrictMode>,
-    document.getElementById('root')
+    document.getElementById("root")
   )
 );
 

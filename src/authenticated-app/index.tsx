@@ -10,7 +10,7 @@ import ProjectListScreen from "screens/project-list";
 import { ProjectModal } from "screens/project-list/project-modal";
 import { resetRoute } from "utils";
 
-export const AuthenticatedApp = () => {
+export default function AuthenticatedApp() {
   return (
     <Container>
       <PageHeader />

@@ -865,3 +865,13 @@ test("Mark 组件正确高亮关键词", () => {
 - `React-Query` 真的是神器
   - 例如在一个 `screen` 里多次调用某 `Query`，可以合并成一次
   - 这样可以大大降低开发心智负担，大胆分离业务到 `hook` 里
+- 借题发挥：
+  - 更大型的项目应该用 `lerna` 管理模块，直接将模块分包成小的 `packages`
+  - 然后 `packages` 里有 `common` : 用来分管共用资源
+  - `packages` 里应该还有各个 `modules` : 其组成又是多个 `screen`
+  - 每个 `modules` 有自己的状态管理，如 `redux` 或 `zustand`
+  - 我觉得更应该按本项目这样做：将 `Apps` 的状态区分为 `服务端状态` 和 `客户端状态`
+    - `服务端状态` 用 `React-Query` 管理
+    - `客户端状态` 用 `Url` 管理
+    - 这样做的好处有一个超级利好，所谓的 `可分布式状态`，在 `a-module` 中直接通过url带状态打开另一模块，而如果用 `redux` 或 `zustand` 虽然也可以做到，但需要在 `module` 中相互发送 `action` 更新对方状态
+    - `url状态管理` 虽然 `DX(开发者体验)` 略低于 `redux` 或 `zustand`，但起可扩展性实在很好

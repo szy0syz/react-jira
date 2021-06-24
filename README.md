@@ -854,4 +854,14 @@ test("Mark 组件正确高亮关键词", () => {
 
 - `yarn add @testing-library/react-hooks msw -D`
 
-> 14-3 0_0
+----
+
+## Summary
+
+- 做中大型项目可以按 `screen` 分页面，或者按 `module` 来分
+  - 如果是按 `module` 来分，则可以包含多个 `screen`
+- 可以给每个 `individual` 模块配一个 `/hooks`文件夹，抽象一部分视图层逻辑和状态
+  - re-used
+- `React-Query` 真的是神器
+  - 例如在一个 `screen` 里多次调用某 `Query`，可以合并成一次
+  - 这样可以大大降低开发心智负担，大胆分离业务到 `hook` 里

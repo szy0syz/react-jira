@@ -870,6 +870,7 @@ test("Mark 组件正确高亮关键词", () => {
   - 然后 `packages` 里有 `common` : 用来分管共用资源
   - `packages` 里应该还有各个 `modules` : 其组成又是多个 `screen`
   - 每个 `modules` 有自己的状态管理，如 `redux` 或 `zustand`
+  - 然后再 `packages` 上层再建一个 `frontend` 用它来驱动所有 `modules`，不能把 `frontend` 放`packages`下，已搞劈了一次
   - 我觉得更应该按本项目这样做：将 `Apps` 的状态区分为 `服务端状态` 和 `客户端状态`
     - `服务端状态` 用 `React-Query` 管理
     - `客户端状态` 用 `Url` 管理
